@@ -44,7 +44,7 @@ class ViewController: UIViewController {
             }
             resultLabel.text = currentNumber
             
-        case "+", "-", "x", "/":
+        case "+", "-", "x", "/", "^":
             if isTypingNumber {
                 performOperation()
             }
@@ -64,6 +64,30 @@ class ViewController: UIViewController {
             }
             
             currentOperation = nil
+            isTypingNumber = false
+        
+        case "%":
+            if let value = Double(currentNumber) {
+                currentNumber = formatNumber(value / 100)
+                resultLabel.text = currentNumber
+            }
+        
+        case "+|-":
+            if currentNumber == "0" {
+                return
+            }
+            if let value = Double(currentNumber) {
+                currentNumber = formatNumber(-value)
+                resultLabel.text = currentNumber
+            }
+        
+        case "log":
+            if let value = Double(currentNumber), value > 0 {
+                currentNumber = formatNumber(log10(value))
+                resultLabel.text = currentNumber
+            } else {
+                resultLabel.text = "Error"
+            }
             isTypingNumber = false
             
         case "C":
@@ -93,6 +117,8 @@ class ViewController: UIViewController {
                 resultLabel.text = "Error"
                 return
             }
+        case "^":
+            previousNumber = pow(previousNumber, current)
         default:
             break
         }
@@ -116,6 +142,8 @@ class ViewController: UIViewController {
                     resultLabel.text = "Error"
                     return
                 }
+            case "^":
+                previousNumber = pow(previousNumber, operand)
             default:
                 break
             }
