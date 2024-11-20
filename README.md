@@ -7,4 +7,6 @@ The code I wrote during the Mobile Devices Programming iOS course at the Jagiell
 
 :white_check_mark: 3.5 [Należy dodać pozostałe operacje: mnożenie, dzielenie oraz odejmowanie](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/1a980deb03b278fa4aa1313a2f9bdadc8009a4ec)
 
+:white_check_mark: 4.0 [Należy dodać obsługę kolejnych działań na wyniku](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/72c8782548b9487c585b8cbcc228de8dca917441)
+
 Kod: [Calculator](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/Calculator)
