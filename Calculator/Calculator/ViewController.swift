@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     var currentNumber: String = "0"
     var previousNumber: Double = 0
     var currentOperation: String? = nil
+    var previousOperation: String? = nil
     var lastOperand: Double? = nil
     var isTypingNumber = false
     
@@ -23,6 +24,10 @@ class ViewController: UIViewController {
     
     @IBAction func buttonTapped(_ sender: UIButton) {
         guard let buttonTitle = sender.titleLabel?.text else {
+            return
+        }
+        
+        if resultLabel.text == "Error" && buttonTitle != "C" {
             return
         }
         
@@ -39,7 +44,7 @@ class ViewController: UIViewController {
             }
             resultLabel.text = currentNumber
             
-        case "+":
+        case "+", "-", "x", "/":
             if isTypingNumber {
                 performOperation()
             }
@@ -53,11 +58,11 @@ class ViewController: UIViewController {
                 let current = Double(currentNumber) ?? 0
                 performOperation()
                 lastOperand = current
+                previousOperation = currentOperation
             } else if let operand = lastOperand {
-                previousNumber += operand
-                currentNumber = formatNumber(previousNumber)
-                resultLabel.text = currentNumber
+                repeatLastOperation(operand: operand)
             }
+            
             currentOperation = nil
             isTypingNumber = false
             
@@ -77,6 +82,17 @@ class ViewController: UIViewController {
         switch operation {
         case "+":
             previousNumber += current
+        case "-":
+            previousNumber -= current
+        case "x":
+            previousNumber *= current
+        case "/":
+            if current != 0 {
+                previousNumber /= current
+            } else {
+                resultLabel.text = "Error"
+                return
+            }
         default:
             break
         }
@@ -85,10 +101,32 @@ class ViewController: UIViewController {
         resultLabel.text = currentNumber
     }
     
+    func repeatLastOperation(operand: Double) {
+            switch previousOperation {
+            case "+":
+                previousNumber += operand
+            case "-":
+                previousNumber -= operand
+            case "x":
+                previousNumber *= operand
+            case "/":
+                if operand != 0 {
+                    previousNumber /= operand
+                } else {
+                    resultLabel.text = "Error"
+                    return
+                }
+            default:
+                break
+            }
+            currentNumber = formatNumber(previousNumber)
+            resultLabel.text = currentNumber
+        }
     func clearCalculator() {
         currentNumber = "0"
         previousNumber = 0
         currentOperation = nil
+        previousOperation = nil
         lastOperand = nil
         isTypingNumber = false
         resultLabel.text = "0"
