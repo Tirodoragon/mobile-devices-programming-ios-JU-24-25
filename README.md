@@ -9,4 +9,6 @@ The code I wrote during the Mobile Devices Programming iOS course at the Jagiell
 
 :white_check_mark: 4.0 [Należy dodać obsługę kolejnych działań na wyniku](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/72c8782548b9487c585b8cbcc228de8dca917441)
 
+:white_check_mark: 4.5 [Należy dodać procent, znak ujemny, logarytm oraz potęgę](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/a90523439b419ed82d7255f286e4c79ed420185c)
+
 Kod: [Calculator](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/Calculator)
