@@ -11,4 +11,8 @@ The code I wrote during the Mobile Devices Programming iOS course at the Jagiell
 
 :white_check_mark: 4.5 [Należy dodać procent, znak ujemny, logarytm oraz potęgę](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/a90523439b419ed82d7255f286e4c79ed420185c)
 
+:white_check_mark: 5.0 [Wersja ma się skalować na tablet](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/846fec55b965e4456b73451cc94d66842feb7f36)
+
 Kod: [Calculator](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/Calculator)
+
+https://github.com/user-attachments/assets/c658b470-63e9-44cd-b7cf-fb963cff98a8
