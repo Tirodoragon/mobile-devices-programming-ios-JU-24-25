@@ -25,4 +25,6 @@ https://github.com/user-attachments/assets/c658b470-63e9-44cd-b7cf-fb963cff98a8
 
 :white_check_mark: 4.0 [Usuwanie (swipe) zadań](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/33476d913d34461d89de2cd8cf721c4e701fa6b2)
 
+:white_check_mark: 4.5 [Zmiana statusu zadania (w tym modyfikacja struktury)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/64c9672a9c1bc3c50a37613f3fd3c94daa37e515)
+
 Kod: [ToDoList](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ToDoList)
