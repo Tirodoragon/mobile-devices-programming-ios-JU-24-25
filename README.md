@@ -3,7 +3,7 @@ The code I wrote during the Mobile Devices Programming iOS course at the Jagiell
 
 **Zadanie 1** Kalkulator
 
-:white_check_mark: 3.0 [Należy stworzyć prosty kalkulator z dodawaniem + opcja czyszczenia wyniku + przycisku wynik.](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/72c8782548b9487c585b8cbcc228de8dca917441)
+:white_check_mark: 3.0 [Należy stworzyć prosty kalkulator z dodawaniem + opcja czyszczenia wyniku + przycisku wynik](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/72c8782548b9487c585b8cbcc228de8dca917441)
 
 :white_check_mark: 3.5 [Należy dodać pozostałe operacje: mnożenie, dzielenie oraz odejmowanie](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/1a980deb03b278fa4aa1313a2f9bdadc8009a4ec)
 
@@ -16,3 +16,9 @@ The code I wrote during the Mobile Devices Programming iOS course at the Jagiell
 Kod: [Calculator](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/Calculator)
 
 https://github.com/user-attachments/assets/c658b470-63e9-44cd-b7cf-fb963cff98a8
+
+**Zadanie 2** Lista zadań
+
+:white_check_mark: 3.0 [Wyświetla listę z góry określonych zadań (ArrayList)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/432fe3fa46193adc00dd8a2b0ea8d667082e278b)
+
+Kod: [ToDoList](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ToDoList)
