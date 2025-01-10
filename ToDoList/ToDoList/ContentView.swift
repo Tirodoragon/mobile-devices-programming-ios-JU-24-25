@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct ContentView: View {
-    let tasks = [
+    @State private var tasks = [
         ("Prepare a presentation for class", "presentation"),
         ("Create a character model in Blender", "blender"),
         ("Create a level in Unity", "unity")
@@ -16,19 +16,26 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List(tasks, id: \.0) { task, imageName in
-                HStack {
-                    Image(imageName)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 40, height: 40)
-                        .cornerRadius(8)
-                    Text(task)
+            List {
+                ForEach(tasks, id: \.0) { task, imageName in
+                    HStack {
+                        Image(imageName)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 40, height: 40)
+                            .cornerRadius(8)
+                        Text(task)
+                    }
+                    .padding(.vertical, 5)
                 }
-                .padding(.vertical, 5)
+                .onDelete(perform: deleteTask)
             }
             .navigationTitle("To-Do List")
         }
+    }
+    
+    private func deleteTask(at offsets: IndexSet) {
+        tasks.remove(atOffsets: offsets)
     }
 }
 
