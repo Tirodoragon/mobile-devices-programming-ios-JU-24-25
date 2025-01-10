@@ -21,4 +21,6 @@ https://github.com/user-attachments/assets/c658b470-63e9-44cd-b7cf-fb963cff98a8
 
 :white_check_mark: 3.0 [Wyświetla listę z góry określonych zadań (ArrayList)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/432fe3fa46193adc00dd8a2b0ea8d667082e278b)
 
+:white_check_mark: 3.5 [Wyświetlanie obrazu na widoku zadania](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/61e3bce5dc2d50aab6756e3d4d82133b5c501515)
+
 Kod: [ToDoList](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ToDoList)
