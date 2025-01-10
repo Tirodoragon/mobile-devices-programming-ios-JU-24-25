@@ -23,4 +23,6 @@ https://github.com/user-attachments/assets/c658b470-63e9-44cd-b7cf-fb963cff98a8
 
 :white_check_mark: 3.5 [Wyświetlanie obrazu na widoku zadania](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/61e3bce5dc2d50aab6756e3d4d82133b5c501515)
 
+:white_check_mark: 4.0 [Usuwanie (swipe) zadań](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/33476d913d34461d89de2cd8cf721c4e701fa6b2)
+
 Kod: [ToDoList](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ToDoList)
