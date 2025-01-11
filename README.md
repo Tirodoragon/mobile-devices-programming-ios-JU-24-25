@@ -27,4 +27,8 @@ https://github.com/user-attachments/assets/c658b470-63e9-44cd-b7cf-fb963cff98a8
 
 :white_check_mark: 4.5 [Zmiana statusu zadania (w tym modyfikacja struktury)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/64c9672a9c1bc3c50a37613f3fd3c94daa37e515)
 
+:white_check_mark: 5.0 [Wyświetlanie statusu na liście zadań](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/3c68ef2d1e452a4870afa23419efc7d289abe7a7)
+
 Kod: [ToDoList](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ToDoList)
+
+https://github.com/user-attachments/assets/cb870997-fc91-4fc7-850b-2e93ab48c780
