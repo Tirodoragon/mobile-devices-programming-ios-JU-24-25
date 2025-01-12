@@ -32,3 +32,9 @@ https://github.com/user-attachments/assets/c658b470-63e9-44cd-b7cf-fb963cff98a8
 Kod: [ToDoList](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ToDoList)
 
 https://github.com/user-attachments/assets/cb870997-fc91-4fc7-850b-2e93ab48c780
+
+**Zadanie 3** Lista zakupów
+
+:white_check_mark: 3.0 [Stworzenie modelów Produktów oraz Kategorii w Core Data](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/023df0eed8d63229eb7b71909ed7b1555f28d90a)
+
+Kod: [ShoppingList](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingList)
