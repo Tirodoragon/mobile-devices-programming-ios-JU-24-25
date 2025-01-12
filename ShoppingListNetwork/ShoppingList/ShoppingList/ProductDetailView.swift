@@ -14,8 +14,8 @@ struct ProductDetailView: View {
     
     var body: some View {
         VStack(spacing: 20) {
-            if let imageName = product.imageName, !imageName.isEmpty {
-                Image(imageName)
+            if let imageName = product.imageName, let cachedImage = ImageCache.shared.loadImage(named: imageName) {
+                Image(uiImage: cachedImage)
                     .resizable()
                     .scaledToFit()
                     .frame(height: 200)

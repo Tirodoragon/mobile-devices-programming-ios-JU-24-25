@@ -23,12 +23,31 @@ struct CartView: View {
                     List {
                         ForEach(cart.products.keys.sorted(by: { $0.name ?? "" < $1.name ?? "" }), id: \.self) { product in
                             HStack {
+                                if let imageName = product.imageName,
+                                   let cachedImage = ImageCache.shared.loadImage(named: imageName) {
+                                    Image(uiImage: cachedImage)
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 50, height: 50)
+                                        .cornerRadius(8)
+                                } else {
+                                    Image(systemName: "photo")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 50, height: 50)
+                                        .foregroundColor(.gray)
+                                        .cornerRadius(8)
+                                }
+                                
                                 VStack(alignment: .leading) {
                                     Text(product.name ?? "Unknown Product")
                                         .font(.headline)
-                                    Text(String(format: "$%.2f", product.price))
+                                    Text("Price: \(formatPrice(product.price))")
                                         .font(.subheadline)
                                         .foregroundColor(.gray)
+                                    Text("Subtotal: \(formatPrice(product.price * Double(cart.products[product] ?? 0)))")
+                                        .font(.subheadline)
+                                        .foregroundColor(.blue)
                                 }
                                 Spacer()
                                 

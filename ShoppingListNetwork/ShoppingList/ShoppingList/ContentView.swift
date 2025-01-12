@@ -6,10 +6,15 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ContentView: View {
     @EnvironmentObject var cart: Cart
-    @StateObject private var dataFetcher = DataFetcher()
+    @StateObject private var dataFetcher: DataFetcher
+    
+    init(context: NSManagedObjectContext) {
+        _dataFetcher = StateObject(wrappedValue: DataFetcher(context: context))
+    }
     
     var body: some View {
         TabView {
@@ -30,7 +35,8 @@ struct ContentView: View {
 }
 
 #Preview {
-    ContentView()
+    ContentView(context: PersistenceController.preview.container.viewContext)
         .environmentObject(Cart())
         .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }
+
