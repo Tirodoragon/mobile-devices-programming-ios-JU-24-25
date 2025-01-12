@@ -21,7 +21,7 @@ struct CartView: View {
                         .padding()
                 } else {
                     List {
-                        ForEach(cart.products, id: \.self) { product in
+                        ForEach(cart.products.keys.sorted(by: { $0.name ?? "" < $1.name ?? "" }), id: \.self) { product in
                             HStack {
                                 VStack(alignment: .leading) {
                                     Text(product.name ?? "Unknown Product")
@@ -32,11 +32,26 @@ struct CartView: View {
                                 }
                                 Spacer()
                                 
-                                Button(action: {
-                                    cart.removeFromCart(product: product)
-                                }) {
-                                    Text("Remove")
-                                        .foregroundColor(.red)
+                                HStack {
+                                    Button(action: {
+                                        cart.removeFromCart(product: product)
+                                    }) {
+                                        Image(systemName: "minus.circle")
+                                            .foregroundColor(.red)
+                                    }
+                                    .buttonStyle(.plain)
+                                    
+                                    Text("\(cart.products[product] ?? 0)")
+                                        .font(.body)
+                                        .frame(width: 30, alignment: .center)
+                                    
+                                    Button(action: {
+                                        cart.addToCart(product: product)
+                                    }) {
+                                        Image(systemName: "plus.circle")
+                                            .foregroundColor(.green)
+                                    }
+                                    .buttonStyle(.plain)
                                 }
                             }
                         }
@@ -64,7 +79,10 @@ struct CartView: View {
     }
     
     private var totalPrice: Double {
-        cart.products.reduce(0) { $0 + $1.price }
+        cart.products.reduce(0) { total, pair in
+            let (product, quantity) = pair
+            return total + (product.price * Double(quantity))
+        }
     }
     
     private func formatPrice(_ price: Double) -> String {
@@ -83,7 +101,10 @@ struct CartView: View {
     
     let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
     if let mockProducts = try? context.fetch(fetchRequest) {
-        cart.products = Array(mockProducts.prefix(2))
+        for product in mockProducts.prefix(2) {
+            cart.addToCart(product: product)
+            cart.addToCart(product: product)
+        }
     }
     
     return CartView()

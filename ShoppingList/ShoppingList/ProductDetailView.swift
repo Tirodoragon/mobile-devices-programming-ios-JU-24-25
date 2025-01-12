@@ -49,14 +49,13 @@ struct ProductDetailView: View {
             Button(action: {
                 cart.addToCart(product: product)
             }) {
-                Text(cart.products.contains(where: { $0.id == product.id }) ? "In Cart" : "Add to Cart")
+                Text("Add to Cart")
                     .padding()
                     .frame(maxWidth: .infinity)
-                    .background(cart.products.contains(where: { $0.id == product.id }) ? Color.gray : Color.blue)
+                    .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(10)
             }
-            .disabled(cart.products.contains(where: { $0.id == product.id }))
             .padding()
         }
         .padding()
