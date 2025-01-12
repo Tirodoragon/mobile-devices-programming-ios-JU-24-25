@@ -10,6 +10,7 @@ import CoreData
 
 struct ProductListView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var cart: Cart
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Category.name, ascending: true)],
@@ -22,7 +23,10 @@ struct ProductListView: View {
                 ForEach(categories) { category in
                     let categoryName = category.name ?? "Unknown Category"
                     let categoryDescription = category.descriptionText ?? ""
+                    
                     let products = Array(category.products as? Set<Product> ?? [])
+                        .sorted(by: { ($0.name ?? "") < ($1.name ?? "") })
+                    
                     Section(
                         header: VStack(alignment: .leading, spacing: 5) {
                             Text(categoryName)
@@ -51,4 +55,10 @@ struct ProductListView: View {
             .navigationTitle("Products")
         }
     }
+}
+
+#Preview {
+    ProductListView()
+        .environmentObject(Cart())
+        .environment(\.managedObjectContext, PersistenceController.preview.container.viewContext)
 }

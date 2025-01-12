@@ -6,9 +6,11 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct ProductDetailView: View {
     let product: Product
+    @EnvironmentObject var cart: Cart
     
     var body: some View {
         VStack(spacing: 20) {
@@ -43,8 +45,36 @@ struct ProductDetailView: View {
             .padding()
             
             Spacer()
+            
+            Button(action: {
+                cart.addToCart(product: product)
+            }) {
+                Text(cart.products.contains(where: { $0.id == product.id }) ? "In Cart" : "Add to Cart")
+                    .padding()
+                    .frame(maxWidth: .infinity)
+                    .background(cart.products.contains(where: { $0.id == product.id }) ? Color.gray : Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(10)
+            }
+            .disabled(cart.products.contains(where: { $0.id == product.id }))
+            .padding()
         }
         .padding()
         .navigationTitle(product.name ?? "Product Details")
     }
+}
+
+#Preview {
+    let context = PersistenceController.preview.container.viewContext
+    
+    let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
+    fetchRequest.fetchLimit = 1
+    
+    guard let product = try? context.fetch(fetchRequest).first else {
+        fatalError("No products found in preview context.")
+    }
+    
+    return ProductDetailView(product: product)
+        .environmentObject(Cart())
+        .environment(\.managedObjectContext, context)
 }

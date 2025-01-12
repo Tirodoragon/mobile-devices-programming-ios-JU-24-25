@@ -10,11 +10,13 @@ import SwiftUI
 @main
 struct ShoppingListApp: App {
     let persistenceController = PersistenceController.shared
+    @StateObject private var cart = Cart()
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environment(\.managedObjectContext, persistenceController.container.viewContext)
+                .environmentObject(cart)
         }
     }
 }

@@ -10,6 +10,13 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
 
+    @MainActor
+    static let preview: PersistenceController = {
+        let controller = PersistenceController(inMemory: true)
+        controller.loadFixturesIfNeeded(context: controller.container.viewContext)
+        return controller
+    }()
+    
     let container: NSPersistentContainer
 
     init(inMemory: Bool = false) {
