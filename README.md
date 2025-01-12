@@ -41,4 +41,6 @@ https://github.com/user-attachments/assets/cb870997-fc91-4fc7-850b-2e93ab48c780
 
 :white_check_mark: 4.0 [Stworzyć listę produktów z podstroną opisu produktu na nowym widoku (dane z core data)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/b17a4e1bafb1386260ec212023de482151452a9f)
 
+:white_check_mark: 4.5 [Opcja dodania produktu do koszyka (tabview)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/10fc810c7e4c36441bea12701fb86144ce681d56)
+
 Kod: [ShoppingList](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingList)
