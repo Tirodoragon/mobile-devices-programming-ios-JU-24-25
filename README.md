@@ -53,4 +53,6 @@ https://github.com/user-attachments/assets/6aef8f2e-dc63-4775-b8f5-a6278b32a908
 
 :white_check_mark: 3.0 [Pobieranie produktów oraz kategorii z aplikacji serwerowej](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/b21e42b944c89fc88fb9904758004a15a84764e4)
 
+:white_check_mark: 3.5 [Zapis danych lokalnie (CoreData)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/129c065659695182a62da81b7da2ae2a2a678493)
+
 Kod: [ShoppingListNetwork](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListNetwork)
