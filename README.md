@@ -48,3 +48,9 @@ https://github.com/user-attachments/assets/cb870997-fc91-4fc7-850b-2e93ab48c780
 Kod: [ShoppingList](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingList)
 
 https://github.com/user-attachments/assets/6aef8f2e-dc63-4775-b8f5-a6278b32a908
+
+**Zadanie 4** Sieć
+
+:white_check_mark: 3.0 [Pobieranie produktów oraz kategorii z aplikacji serwerowej](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/b21e42b944c89fc88fb9904758004a15a84764e4)
+
+Kod: [ShoppingListNetwork](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListNetwork)
