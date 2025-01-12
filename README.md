@@ -43,4 +43,8 @@ https://github.com/user-attachments/assets/cb870997-fc91-4fc7-850b-2e93ab48c780
 
 :white_check_mark: 4.5 [Opcja dodania produktu do koszyka (tabview)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/10fc810c7e4c36441bea12701fb86144ce681d56)
 
+:white_check_mark: 5.0 [Dodanie więcej niż jeden produkt tego samego typu do koszyka](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/60e6ffcb4355021f7ed2126c63bbe8b32e18f00f)
+
 Kod: [ShoppingList](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingList)
+
+https://github.com/user-attachments/assets/6aef8f2e-dc63-4775-b8f5-a6278b32a908
