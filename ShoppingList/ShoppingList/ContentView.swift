@@ -9,9 +9,8 @@ import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        Text("Shopping List")
-            .font(.largeTitle)
-            .padding()
+        ProductListView()
+            .environment(\.managedObjectContext, PersistenceController.shared.container.viewContext)
     }
 }
 
