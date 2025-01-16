@@ -2,7 +2,7 @@
 //  ProductDetailView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/12/25.
+//  Created by Tirodoragon on 1/16/25.
 //
 
 import SwiftUI
@@ -61,19 +61,4 @@ struct ProductDetailView: View {
         .padding()
         .navigationTitle(product.name ?? "Product Details")
     }
-}
-
-#Preview {
-    let context = PersistenceController.preview.container.viewContext
-    
-    let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
-    fetchRequest.fetchLimit = 1
-    
-    guard let product = try? context.fetch(fetchRequest).first else {
-        fatalError("No products found in preview context.")
-    }
-    
-    return ProductDetailView(product: product)
-        .environmentObject(Cart())
-        .environment(\.managedObjectContext, context)
 }

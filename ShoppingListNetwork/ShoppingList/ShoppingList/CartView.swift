@@ -2,7 +2,7 @@
 //  CartView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/15/25.
+//  Created by Tirodoragon on 1/16/25.
 //
 
 import SwiftUI
@@ -167,21 +167,4 @@ struct CartView: View {
             }
         }
     }
-}
-
-#Preview {
-    let cart = Cart()
-    let context = PersistenceController.preview.container.viewContext
-    
-    let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
-    if let mockProducts = try? context.fetch(fetchRequest) {
-        for product in mockProducts.prefix(2) {
-            cart.addToCart(product: product)
-            cart.addToCart(product: product)
-        }
-    }
-    
-    return CartView()
-        .environmentObject(cart)
-        .environmentObject(DataFetcher(context: context))
 }

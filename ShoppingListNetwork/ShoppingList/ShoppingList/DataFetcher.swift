@@ -10,9 +10,13 @@ import CoreData
 import UIKit
 
 class DataFetcher: ObservableObject {
+    @Published var isLoading: Bool = true
     @Published var categories: [Dictionary<String, Any>] = []
     @Published var products: [Dictionary<String, Any>] = []
     @Published var orders: [Dictionary<String, Any>] = []
+    
+    private var pendingImageDownloads: Int = 0
+    private let imageDownloadQueue = DispatchQueue(label: "com.shoppinglist.imageDownloadQueue")
     private let viewContext: NSManagedObjectContext
     
     init(context: NSManagedObjectContext) {
@@ -20,51 +24,59 @@ class DataFetcher: ObservableObject {
     }
     
     func loadData() {
-        loadCategories()
-        loadProducts()
-        loadOrders()
+        isLoading = true
+        loadCategories {
+            self.loadProducts() {
+                self.loadOrders() {
+                    self.checkLoadingComplete()
+                }
+            }
+        }
     }
     
-    private func loadCategories() {
+    private func loadCategories(completion: @escaping () -> Void = {}) {
         APIClient.shared.fetchJSON(from: "/categories") { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let categories):
-                    self.saveCategories(categories)
+                    self.saveCategories(categories, completion: completion)
                 case .failure(let error):
                     print("Failed to fetch categories: \(error.localizedDescription)")
+                    completion()
                 }
             }
         }
     }
     
-    private func loadProducts() {
+    private func loadProducts(completion: @escaping () -> Void = {}) {
         APIClient.shared.fetchJSON(from: "/products") { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let products):
-                    self.saveProducts(products)
+                    self.saveProducts(products, completion: completion)
                 case .failure(let error):
                     print("Failed to fetch products: \(error.localizedDescription)")
+                    completion()
                 }
             }
         }
     }
     
-    func loadOrders() {
+    func loadOrders(completion: @escaping () -> Void = {}) {
         APIClient.shared.fetchJSON(from: "/orders") { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let orders):
-                    self.syncOrdersWithCoreData(orders)
+                    self.syncOrdersWithCoreData(orders, completion: completion)
                 case .failure(let error):
                     print("Failed to fetch orders: \(error.localizedDescription)")
+                    completion()
                 }
             }
         }
     }
     
-    private func saveCategories(_ categories: [Dictionary<String, Any>]) {
+    private func saveCategories(_ categories: [Dictionary<String, Any>], completion: @escaping () -> Void) {
         for category in categories {
             let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "id == %d", category["id"] as? Int64 ?? 0)
@@ -87,9 +99,10 @@ class DataFetcher: ObservableObject {
             }
         }
         saveContext()
+        completion()
     }
     
-    private func saveProducts(_ products: [Dictionary<String, Any>]) {
+    private func saveProducts(_ products: [Dictionary<String, Any>], completion: @escaping () -> Void) {
         for product in products {
             let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "id == %d", product["id"] as? Int64 ?? 0)
@@ -120,9 +133,10 @@ class DataFetcher: ObservableObject {
             }
         }
         saveContext()
+        completion()
     }
     
-    private func syncOrdersWithCoreData(_ orders: [Dictionary<String, Any>]) {
+    private func syncOrdersWithCoreData(_ orders: [Dictionary<String, Any>], completion: @escaping () -> Void) {
         let fetchRequest: NSFetchRequest<Order> = Order.fetchRequest()
         if let existingOrders = try? viewContext.fetch(fetchRequest) {
             for order in existingOrders {
@@ -148,6 +162,7 @@ class DataFetcher: ObservableObject {
         }
 
         saveContext()
+        completion()
     }
     
     private func fetchCategory(by id: Int64) -> Category? {
@@ -167,13 +182,38 @@ class DataFetcher: ObservableObject {
         
         let fileName = (name as NSString).lastPathComponent
         
+        imageDownloadQueue.sync {
+            pendingImageDownloads += 1
+        }
+        
         URLSession.shared.dataTask(with: url) { data, _, error in
-            guard let data = data, error == nil, let image = UIImage(data: data) else { return }
+            guard let data = data, error == nil, let image = UIImage(data: data) else {
+                self.decrementPendingDownloads()
+                return
+            }
             
             DispatchQueue.main.async {
                 ImageCache.shared.saveImage(image, withName: fileName)
+                self.decrementPendingDownloads()
             }
         }.resume()
+    }
+    
+    private func decrementPendingDownloads() {
+        imageDownloadQueue.sync {
+            pendingImageDownloads -= 1
+            checkLoadingComplete()
+        }
+    }
+    
+    private func checkLoadingComplete() {
+        imageDownloadQueue.async {
+            if self.pendingImageDownloads == 0 {
+                DispatchQueue.main.async {
+                    self.isLoading = false
+                }
+            }
+        }
     }
     
     private func saveContext() {

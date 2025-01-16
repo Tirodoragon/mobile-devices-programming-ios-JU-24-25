@@ -2,7 +2,7 @@
 //  Persistence.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/12/25.
+//  Created by Tirodoragon on 1/16/25.
 //
 
 import CoreData
@@ -10,10 +10,8 @@ import CoreData
 struct PersistenceController {
     static let shared = PersistenceController()
 
-    @MainActor
-    static let preview: PersistenceController = {
-        let controller = PersistenceController(inMemory: true)
-        return controller
+    static let inMemory: PersistenceController = {
+        PersistenceController(inMemory: true)
     }()
     
     let container: NSPersistentContainer

@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/15/25.
+//  Created by Tirodoragon on 1/16/25.
 //
 
 import SwiftUI
@@ -18,9 +18,9 @@ struct ContentView: View {
     
     var body: some View {
         TabView {
-            ProductListView()
+            CategoryListView()
                 .tabItem {
-                    Label("Products", systemImage: "bag")
+                    Label("Categories", systemImage: "square.grid.2x2")
                 }
                 .environmentObject(dataFetcher)
             
@@ -40,12 +40,4 @@ struct ContentView: View {
             dataFetcher.loadData()
         }
     }
-}
-
-#Preview {
-    let context = PersistenceController.preview.container.viewContext
-    ContentView(context: context)
-        .environmentObject(Cart())
-        .environmentObject(DataFetcher(context: context))
-        .environment(\.managedObjectContext, context)
 }
