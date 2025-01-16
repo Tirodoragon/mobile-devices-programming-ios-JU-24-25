@@ -55,4 +55,6 @@ https://github.com/user-attachments/assets/6aef8f2e-dc63-4775-b8f5-a6278b32a908
 
 :white_check_mark: 3.5 [Zapis danych lokalnie (CoreData)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/129c065659695182a62da81b7da2ae2a2a678493)
 
+:white_check_mark: 4.0 [Pobieranie dodatkowo zamówień (minimum 5 pól, w tym jedna relacja)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/a61fedcf427d835e2050119ae2beded79347a2d2)
+
 Kod: [ShoppingListNetwork](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListNetwork)
