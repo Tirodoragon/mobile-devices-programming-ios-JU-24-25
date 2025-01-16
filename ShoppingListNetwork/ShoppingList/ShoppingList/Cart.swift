@@ -2,10 +2,11 @@
 //  Cart.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/12/25.
+//  Created by Tirodoragon on 1/15/25.
 //
 
 import Combine
+import Foundation
 
 class Cart: ObservableObject {
     @Published var products: [Product: Int] = [:]
@@ -32,5 +33,19 @@ class Cart: ObservableObject {
     
     func totalPrice() -> Double {
         products.reduce(0) { $0 + ($1.key.price * Double($1.value)) }
+    }
+    
+    func prepareOrderData() -> [String: Any] {
+        let productIds = products.keys.map { $0.id }
+        let quantities = products.values.map { Int64($0) }
+        let totalPrice = self.totalPrice()
+        
+        return [
+            "date": ISO8601DateFormatter().string(from: Date()),
+            "totalPrice": totalPrice,
+            "products": productIds,
+            "quantities": quantities,
+            "customerId": 1
+        ]
     }
 }

@@ -2,7 +2,7 @@
 //  CartView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/12/25.
+//  Created by Tirodoragon on 1/15/25.
 //
 
 import SwiftUI
@@ -10,6 +10,9 @@ import CoreData
 
 struct CartView: View {
     @EnvironmentObject var cart: Cart
+    @State private var isSubmittingOrder = false
+    @State private var orderSubmissionSuccess: Bool? = nil
+    @EnvironmentObject var dataFetcher: DataFetcher
     
     var body: some View {
         NavigationView {
@@ -81,6 +84,32 @@ struct CartView: View {
                     Text("Total: \(formatPrice(totalPrice))")
                         .font(.headline)
                         .padding(.top)
+                    
+                    Button(action: submitOrder) {
+                        Text("Place Order")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(10)
+                    }
+                    .padding()
+                    .disabled(isSubmittingOrder)
+                }
+                
+                if let success = orderSubmissionSuccess {
+                    Text(success ? "Order placed successfully!" : "Failed to place order. Please try again.")
+                        .foregroundColor(success ? .green : .red)
+                        .font(.headline)
+                        .padding()
+                        .transition(.opacity)
+                        .onAppear() {
+                            if !success {
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                                    orderSubmissionSuccess = nil
+                                }
+                            }
+                        }
                 }
             }
             .navigationTitle("Cart")
@@ -93,6 +122,9 @@ struct CartView: View {
                         .foregroundColor(.red)
                     }
                 }
+            }
+            .onDisappear {
+                orderSubmissionSuccess = nil
             }
         }
     }
@@ -112,6 +144,29 @@ struct CartView: View {
         formatter.usesGroupingSeparator = false
         return formatter.string(from: NSNumber(value: price)) ?? "$0.00"
     }
+    
+    private func submitOrder() {
+        isSubmittingOrder = true
+        orderSubmissionSuccess = nil
+        
+        let orderData = cart.prepareOrderData()
+        APIClient.shared.postJSON(to: "/orders", data: orderData) { result in
+            DispatchQueue.main.async {
+                isSubmittingOrder = false
+                switch result {
+                case .success:
+                    orderSubmissionSuccess = true
+                    cart.clearCart()
+                    dataFetcher.loadOrders()
+                case .failure:
+                    orderSubmissionSuccess = false
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
+                        orderSubmissionSuccess = nil
+                    }
+                }
+            }
+        }
+    }
 }
 
 #Preview {
@@ -128,4 +183,5 @@ struct CartView: View {
     
     return CartView()
         .environmentObject(cart)
+        .environmentObject(DataFetcher(context: context))
 }

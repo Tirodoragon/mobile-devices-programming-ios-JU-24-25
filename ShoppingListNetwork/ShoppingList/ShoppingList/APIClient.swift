@@ -2,7 +2,7 @@
 //  APIClient.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/12/25.
+//  Created by Tirodoragon on 1/15/25.
 //
 
 import Foundation
@@ -37,6 +37,36 @@ class APIClient {
             } catch {
                 completion(.failure(error))
             }
+        }.resume()
+    }
+    
+    func postJSON(to endpoint: String, data: [String: Any], completion: @escaping (Result<Void, Error>) -> Void) {
+        guard let url = URL(string: "\(baseURL)\(endpoint)") else {
+            completion(.failure(NSError(domain: "Invalid URL", code: -1, userInfo: nil)))
+            return
+        }
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: data, options: [])
+        } catch {
+            completion(.failure(error))
+            return
+        }
+        
+        URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            guard let httpResponse = response as? HTTPURLResponse, (200...299).contains(httpResponse.statusCode) else {
+                completion(.failure(NSError(domain: "Invalid response", code: -1, userInfo: nil)))
+                return
+            }
+            completion(.success(()))
         }.resume()
     }
 }

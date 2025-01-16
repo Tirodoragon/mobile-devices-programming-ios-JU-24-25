@@ -2,7 +2,7 @@
 //  DataFetcher.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/12/25.
+//  Created by Tirodoragon on 1/16/25.
 //
 
 import Foundation
@@ -12,6 +12,7 @@ import UIKit
 class DataFetcher: ObservableObject {
     @Published var categories: [Dictionary<String, Any>] = []
     @Published var products: [Dictionary<String, Any>] = []
+    @Published var orders: [Dictionary<String, Any>] = []
     private let viewContext: NSManagedObjectContext
     
     init(context: NSManagedObjectContext) {
@@ -19,6 +20,12 @@ class DataFetcher: ObservableObject {
     }
     
     func loadData() {
+        loadCategories()
+        loadProducts()
+        loadOrders()
+    }
+    
+    private func loadCategories() {
         APIClient.shared.fetchJSON(from: "/categories") { result in
             DispatchQueue.main.async {
                 switch result {
@@ -29,7 +36,9 @@ class DataFetcher: ObservableObject {
                 }
             }
         }
-        
+    }
+    
+    private func loadProducts() {
         APIClient.shared.fetchJSON(from: "/products") { result in
             DispatchQueue.main.async {
                 switch result {
@@ -37,6 +46,19 @@ class DataFetcher: ObservableObject {
                     self.saveProducts(products)
                 case .failure(let error):
                     print("Failed to fetch products: \(error.localizedDescription)")
+                }
+            }
+        }
+    }
+    
+    func loadOrders() {
+        APIClient.shared.fetchJSON(from: "/orders") { result in
+            DispatchQueue.main.async {
+                switch result {
+                case .success(let orders):
+                    self.syncOrdersWithCoreData(orders)
+                case .failure(let error):
+                    print("Failed to fetch orders: \(error.localizedDescription)")
                 }
             }
         }
@@ -100,10 +122,44 @@ class DataFetcher: ObservableObject {
         saveContext()
     }
     
+    private func syncOrdersWithCoreData(_ orders: [Dictionary<String, Any>]) {
+        let fetchRequest: NSFetchRequest<Order> = Order.fetchRequest()
+        if let existingOrders = try? viewContext.fetch(fetchRequest) {
+            for order in existingOrders {
+                viewContext.delete(order)
+            }
+        }
+        
+        for orderData in orders {
+            let newOrder = Order(context: viewContext)
+            newOrder.id = orderData["id"] as? Int64 ?? 0
+            newOrder.date = ISO8601DateFormatter().date(from: orderData["date"] as? String ?? "")
+            newOrder.totalPrice = orderData["totalPrice"] as? Double ?? 0.0
+            newOrder.customerId = orderData["customerId"] as? Int64 ?? 0
+            
+            if let productIds = orderData["products"] as? [Int64],
+               let quantities = orderData["quantities"] as? [Int64] {
+                let sortedProductsWithQuantities = zip(productIds, quantities)
+                    .sorted { $0.0 < $1.0 }
+    
+                newOrder.products = NSSet(array: fetchProducts(byIds: sortedProductsWithQuantities.map { $0.0 }))
+                newOrder.quantities = sortedProductsWithQuantities.map { $0.1 } as NSObject
+            }
+        }
+
+        saveContext()
+    }
+    
     private func fetchCategory(by id: Int64) -> Category? {
         let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "id == %d", id)
         return try? viewContext.fetch(fetchRequest).first
+    }
+    
+    private func fetchProducts(byIds ids: [Int64]) -> [Product] {
+        let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id IN %@", ids)
+        return (try? viewContext.fetch(fetchRequest)) ?? []
     }
     
     private func downloadImage(from urlString: String, name: String) {
