@@ -57,4 +57,6 @@ https://github.com/user-attachments/assets/6aef8f2e-dc63-4775-b8f5-a6278b32a908
 
 :white_check_mark: 4.0 [Pobieranie dodatkowo zamówień (minimum 5 pól, w tym jedna relacja)](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/a61fedcf427d835e2050119ae2beded79347a2d2)
 
+:white_check_mark: 4.5 [Wyświetlanie produktów oraz ich kategorii na dwóch osobnych listach](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/53e25f4da737ae54adebc99db7e08ae87d9ecf5f)
+
 Kod: [ShoppingListNetwork](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListNetwork)
