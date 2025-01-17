@@ -10,20 +10,21 @@ import CoreData
 
 struct OrdersView: View {
     @Environment(\.managedObjectContext) private var viewContext
+    @EnvironmentObject var userSession: UserSession
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Order.date, ascending: true)],
         animation: .default
-    ) private var orders: FetchedResults<Order>
+    ) private var allOrders: FetchedResults<Order>
     
     var body: some View {
         NavigationView {
             List {
-                if orders.isEmpty {
+                if filteredOrders.isEmpty {
                     Text("No orders available.")
                         .foregroundColor(.gray)
                 } else {
-                    ForEach(orders, id: \.self) { order in
+                    ForEach(filteredOrders, id: \.self) { order in
                         OrderRow(order: order)
                     }
                 }
@@ -33,6 +34,13 @@ struct OrdersView: View {
                 refreshOrders()
             }
         }
+    }
+    
+    private var filteredOrders: [Order] {
+        guard let userId = userSession.userId else {
+            return []
+        }
+        return allOrders.filter { $0.customerId == userId }
     }
     
     private func refreshOrders() {
@@ -51,7 +59,7 @@ struct OrderRow: View {
             Text("Total: $\(String(format: "%.2f", order.totalPrice))")
                 .font(.subheadline)
                 .foregroundColor(.secondary)
-        renderProductsAndQuantities()
+            renderProductsAndQuantities()
         }
         .padding(.vertical, 5)
     }

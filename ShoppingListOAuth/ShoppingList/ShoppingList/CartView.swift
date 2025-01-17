@@ -149,7 +149,12 @@ struct CartView: View {
         isSubmittingOrder = true
         orderSubmissionSuccess = nil
         
-        let orderData = cart.prepareOrderData()
+        guard let orderData = cart.prepareOrderData() else {
+            isSubmittingOrder = false
+            orderSubmissionSuccess = false
+            return
+        }
+        
         APIClient.shared.postJSON(to: "/orders", data: orderData) { result in
             DispatchQueue.main.async {
                 isSubmittingOrder = false

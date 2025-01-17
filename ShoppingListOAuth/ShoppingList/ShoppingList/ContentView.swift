@@ -10,6 +10,7 @@ import CoreData
 
 struct ContentView: View {
     @EnvironmentObject var cart: Cart
+    @EnvironmentObject var userSession: UserSession
     @StateObject private var dataFetcher: DataFetcher
     
     init(context: NSManagedObjectContext) {
@@ -17,27 +18,42 @@ struct ContentView: View {
     }
     
     var body: some View {
-        TabView {
-            CategoryListView()
-                .tabItem {
-                    Label("Categories", systemImage: "square.grid.2x2")
+            NavigationView {
+                TabView {
+                    CategoryListView()
+                        .tabItem {
+                            Label("Categories", systemImage: "square.grid.2x2")
+                        }
+                        .environmentObject(dataFetcher)
+                    
+                    CartView()
+                        .tabItem {
+                            Label("Cart", systemImage: "cart")
+                        }
+                        .environmentObject(dataFetcher)
+                    
+                    OrdersView()
+                        .tabItem {
+                            Label("Orders", systemImage: "list.bullet.rectangle")
+                        }
+                        .environmentObject(dataFetcher)
                 }
-                .environmentObject(dataFetcher)
-            
-            CartView()
-                .tabItem {
-                    Label("Cart", systemImage: "cart")
+                .onAppear {
+                    dataFetcher.loadData()
                 }
-                .environmentObject(dataFetcher)
-            
-            OrdersView()
-                .tabItem {
-                    Label("Orders", systemImage: "list.bullet.rectangle")
+                .toolbar {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: logout) {
+                            Text("Logout")
+                                .foregroundColor(.red)
+                        }
+                    }
                 }
-                .environmentObject(dataFetcher)
+            }
         }
-        .onAppear {
-            dataFetcher.loadData()
+
+        private func logout() {
+            userSession.userId = nil
+            cart.clearCart()
         }
     }
-}

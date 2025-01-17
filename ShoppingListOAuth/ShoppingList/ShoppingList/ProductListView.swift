@@ -12,6 +12,7 @@ struct ProductListView: View {
     let category: Category
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var cart: Cart
+    @EnvironmentObject var userSession: UserSession
     
     @FetchRequest(
         sortDescriptors: [NSSortDescriptor(keyPath: \Product.name, ascending: true)],
@@ -53,11 +54,13 @@ struct ProductListView: View {
             }
             .navigationTitle(category.name ?? "Products")
             .toolbar {
-                ToolbarItem(placement: .navigationBarTrailing) {
-                    Button(action: {
-                        isShowingAddProductView = true
-                    }) {
-                        Image(systemName: "plus")
+                if userSession.userId == 1 {
+                    ToolbarItem(placement: .navigationBarTrailing) {
+                        Button(action: {
+                            isShowingAddProductView = true
+                        }) {
+                            Image(systemName: "plus")
+                        }
                     }
                 }
             }

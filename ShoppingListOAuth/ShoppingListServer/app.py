@@ -158,5 +158,32 @@ def login():
     else:
         return jsonify({'error': 'Invalid credentials'}), 401
 
+@app.route('/register', methods=['POST'])
+def register():
+    data = request.get_json()
+    if not data or 'username' not in data or 'password' not in data:
+        return jsonify({'error': 'Missing username or password'}), 400
+
+    username = data['username']
+    password = data['password']
+
+    users = load_users()
+
+    if any(u['username'] == username for u in users):
+        return jsonify({'error': 'Username already exists'}), 409
+
+    new_user_id = max((u['id'] for u in users), default=0) + 1
+    new_user = OrderedDict({
+        "id": new_user_id,
+        "username": username,
+        "password": password
+    })
+    users.append(new_user)
+
+    with open(USERS_FILE, 'w') as file:
+        json.dump(users, file, indent=4)
+
+    return jsonify({'message': 'Registration successful', 'userId': new_user_id}), 201
+
 if __name__ == "__main__":
     app.run(debug=True)

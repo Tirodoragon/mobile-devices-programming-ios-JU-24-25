@@ -10,17 +10,18 @@ import SwiftUI
 @main
 struct ShoppingListApp: App {
     let persistenceController = PersistenceController.shared
-    @StateObject private var cart = Cart()
-    @State private var isLoggedIn = false
+    @StateObject private var userSession = UserSession()
     
     var body: some Scene {
         WindowGroup {
-            if isLoggedIn {
+            if let _ = userSession.userId {
                 ContentView(context: persistenceController.container.viewContext)
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
-                    .environmentObject(cart)
+                    .environmentObject(Cart(userSession: userSession))
+                    .environmentObject(userSession)
             } else {
-                LoginView(isLoggedIn: $isLoggedIn)
+                LoginView()
+                    .environmentObject(userSession)
             }
         }
     }
