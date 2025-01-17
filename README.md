@@ -59,4 +59,8 @@ https://github.com/user-attachments/assets/6aef8f2e-dc63-4775-b8f5-a6278b32a908
 
 :white_check_mark: 4.5 [Wyświetlanie produktów oraz ich kategorii na dwóch osobnych listach](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/53e25f4da737ae54adebc99db7e08ae87d9ecf5f)
 
+:white_check_mark: 5.0 [Dodawanie produktów z poziomu aplikacji mobilnej](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/c77982782eac30750966799c32851c1270827879)
+
 Kod: [ShoppingListNetwork](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListNetwork)
+
+https://github.com/user-attachments/assets/0b44e220-752b-4e45-a8fa-ab11a254c916
