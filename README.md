@@ -64,3 +64,9 @@ https://github.com/user-attachments/assets/6aef8f2e-dc63-4775-b8f5-a6278b32a908
 Kod: [ShoppingListNetwork](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListNetwork)
 
 https://github.com/user-attachments/assets/0b44e220-752b-4e45-a8fa-ab11a254c916
+
+**Zadanie 5** OAuth
+
+:white_check_mark: 3.0 [Logowanie przez aplikację serwerową](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/d1ad2cff4b3ad0eee5b9c97e9eb16d4eb4e551ea)
+
+Kod: [ShoppingListOAuth](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListOAuth)
