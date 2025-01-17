@@ -2,7 +2,7 @@
 //  CategoryListView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/16/25.
+//  Created by Tirodoragon on 1/17/25.
 //
 
 import SwiftUI
@@ -32,13 +32,13 @@ struct CategoryListView: View {
                                     Image(uiImage: cachedImage)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 40, height: 40)
+                                        .frame(width: 75, height: 75)
                                         .cornerRadius(5)
                             } else {
                                 Image(systemName: "photo")
                                     .resizable()
                                     .scaledToFit()
-                                    .frame(width: 40, height: 40)
+                                    .frame(width: 75, height: 75)
                                     .cornerRadius(5)
                             }
 

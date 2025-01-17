@@ -2,7 +2,7 @@
 //  ProductDetailView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/16/25.
+//  Created by Tirodoragon on 1/17/25.
 //
 
 import SwiftUI
@@ -29,7 +29,7 @@ struct ProductDetailView: View {
                     .cornerRadius(10)
             }
             
-            VStack(alignment: .leading, spacing: 10) {
+            VStack(spacing: 10) {
                 Text(product.name ?? "Unknown Product")
                     .font(.title)
                     .fontWeight(.bold)
@@ -59,6 +59,6 @@ struct ProductDetailView: View {
             .padding()
         }
         .padding()
-        .navigationTitle(product.name ?? "Product Details")
+        //.navigationTitle(product.name ?? "Product Details")
     }
 }

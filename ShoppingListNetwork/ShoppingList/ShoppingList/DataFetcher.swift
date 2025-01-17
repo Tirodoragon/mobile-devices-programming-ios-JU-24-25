@@ -2,7 +2,7 @@
 //  DataFetcher.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/16/25.
+//  Created by Tirodoragon on 1/17/25.
 //
 
 import Foundation
@@ -48,7 +48,7 @@ class DataFetcher: ObservableObject {
         }
     }
     
-    private func loadProducts(completion: @escaping () -> Void = {}) {
+    func loadProducts(completion: @escaping () -> Void = {}) {
         APIClient.shared.fetchJSON(from: "/products") { result in
             DispatchQueue.main.async {
                 switch result {
@@ -77,6 +77,11 @@ class DataFetcher: ObservableObject {
     }
     
     private func saveCategories(_ categories: [Dictionary<String, Any>], completion: @escaping () -> Void) {
+        let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
+        let existingCategories = (try? viewContext.fetch(fetchRequest)) ?? []
+        
+        let serverCategoryIDs = Set(categories.compactMap { $0["id"] as? Int64 })
+        
         for category in categories {
             let fetchRequest: NSFetchRequest<Category> = Category.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "id == %d", category["id"] as? Int64 ?? 0)
@@ -92,17 +97,29 @@ class DataFetcher: ObservableObject {
                 newCategory.descriptionText = category["descriptionText"] as? String ?? "Unknown Description"
                 newCategory.iconName = category["iconName"] as? String ?? "Unknown Icon"
             }
-            
+
             if let iconName = category["iconName"] as? String {
                 let imageURL = "http://127.0.0.1:5000/\(iconName)"
                 downloadImage(from: imageURL, name: iconName)
             }
         }
+        
+        for existingCategory in existingCategories {
+            if !serverCategoryIDs.contains(existingCategory.id) {
+                viewContext.delete(existingCategory)
+            }
+        }
+        
         saveContext()
         completion()
     }
     
     private func saveProducts(_ products: [Dictionary<String, Any>], completion: @escaping () -> Void) {
+        let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
+        let existingProducts = (try? viewContext.fetch(fetchRequest)) ?? []
+        
+        let serverProductIDs = Set(products.compactMap { $0["id"] as? Int64 })
+
         for product in products {
             let fetchRequest: NSFetchRequest<Product> = Product.fetchRequest()
             fetchRequest.predicate = NSPredicate(format: "id == %d", product["id"] as? Int64 ?? 0)
@@ -132,6 +149,13 @@ class DataFetcher: ObservableObject {
                 downloadImage(from: imageURL, name: imageName)
             }
         }
+
+        for existingProduct in existingProducts {
+            if !serverProductIDs.contains(existingProduct.id) {
+                viewContext.delete(existingProduct)
+            }
+        }
+
         saveContext()
         completion()
     }

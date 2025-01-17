@@ -2,7 +2,7 @@
 //  CartView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/16/25.
+//  Created by Tirodoragon on 1/17/25.
 //
 
 import SwiftUI
@@ -31,13 +31,13 @@ struct CartView: View {
                                     Image(uiImage: cachedImage)
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 50, height: 50)
+                                        .frame(width: 80, height: 80)
                                         .cornerRadius(8)
                                 } else {
                                     Image(systemName: "photo")
                                         .resizable()
                                         .scaledToFit()
-                                        .frame(width: 50, height: 50)
+                                        .frame(width: 80, height: 80)
                                         .foregroundColor(.gray)
                                         .cornerRadius(8)
                                 }
