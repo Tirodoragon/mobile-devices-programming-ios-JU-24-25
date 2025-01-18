@@ -151,7 +151,7 @@ struct CartView: View {
         isSubmittingOrder = true
         orderSubmissionSuccess = nil
         
-        if userSession.isGoogleUser {
+        if userSession.isOAuthUser {
             saveOrderLocally()
         } else {
             sendOrderToServer()

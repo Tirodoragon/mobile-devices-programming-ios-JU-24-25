@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		FC2040792D3B32590075BD04 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FC2040782D3B32590075BD04 /* GoogleSignInSwift */; };
+		FC3A896D2D3C16A70072ACB6 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = FC3A896C2D3C16A70072ACB6 /* FacebookCore */; };
+		FC3A896F2D3C16A70072ACB6 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = FC3A896E2D3C16A70072ACB6 /* FacebookLogin */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -70,6 +72,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				FC2040792D3B32590075BD04 /* GoogleSignInSwift in Frameworks */,
+				FC3A896D2D3C16A70072ACB6 /* FacebookCore in Frameworks */,
+				FC3A896F2D3C16A70072ACB6 /* FacebookLogin in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -131,6 +135,8 @@
 			name = ShoppingList;
 			packageProductDependencies = (
 				FC2040782D3B32590075BD04 /* GoogleSignInSwift */,
+				FC3A896C2D3C16A70072ACB6 /* FacebookCore */,
+				FC3A896E2D3C16A70072ACB6 /* FacebookLogin */,
 			);
 			productName = ShoppingList;
 			productReference = FC313A4E2D327F690057F9A7 /* ShoppingList.app */;
@@ -216,6 +222,7 @@
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				FC2040772D3B32590075BD04 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+				FC3A896B2D3C16A70072ACB6 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FC313A4F2D327F690057F9A7 /* Products */;
@@ -586,6 +593,14 @@
 				minimumVersion = 8.0.0;
 			};
 		};
+		FC3A896B2D3C16A70072ACB6 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/facebook/facebook-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 14.1.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -593,6 +608,16 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FC2040772D3B32590075BD04 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
 			productName = GoogleSignInSwift;
+		};
+		FC3A896C2D3C16A70072ACB6 /* FacebookCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC3A896B2D3C16A70072ACB6 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookCore;
+		};
+		FC3A896E2D3C16A70072ACB6 /* FacebookLogin */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC3A896B2D3C16A70072ACB6 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
+			productName = FacebookLogin;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

@@ -11,21 +11,21 @@ import CoreData
 class UserSession: ObservableObject {
     @Published var userId: Int? = nil
     @Published var username: String? = nil
-    @Published var isGoogleUser: Bool = false
+    @Published var isOAuthUser: Bool = false
     
-    func login(userId: Int, username: String, isGoogleUser: Bool = false) {
+    func login(userId: Int, username: String, isOAuthUser: Bool = false) {
         self.userId = userId
         self.username = username
-        self.isGoogleUser = isGoogleUser
+        self.isOAuthUser = isOAuthUser
     }
 
     func logout(viewContext: NSManagedObjectContext) {
-        if isGoogleUser {
+        if isOAuthUser {
             deleteLocalOrders(for: userId, context: viewContext)
         }
         self.userId = nil
         self.username = nil
-        self.isGoogleUser = false
+        self.isOAuthUser = false
     }
     
     private func deleteLocalOrders(for userId: Int?, context: NSManagedObjectContext) {

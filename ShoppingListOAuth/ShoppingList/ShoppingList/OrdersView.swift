@@ -18,7 +18,7 @@ struct OrdersView: View {
     @State private var isLoading: Bool = false
 
     init(userSession: UserSession) {
-        if let userId = userSession.userId, userSession.isGoogleUser {
+        if let userId = userSession.userId, userSession.isOAuthUser {
             localOrders = FetchRequest<Order>(
                 entity: Order.entity(),
                 sortDescriptors: [NSSortDescriptor(keyPath: \Order.date, ascending: false)],
@@ -49,12 +49,12 @@ struct OrdersView: View {
             }
             .navigationTitle("Orders")
             .refreshable {
-                if !userSession.isGoogleUser {
+                if !userSession.isOAuthUser {
                     refreshOrders()
                 }
             }
             .onAppear {
-                if !userSession.isGoogleUser {
+                if !userSession.isOAuthUser {
                     refreshOrders()
                 }
             }
@@ -62,7 +62,7 @@ struct OrdersView: View {
     }
 
     private var filteredOrders: [Order] {
-        if userSession.isGoogleUser {
+        if userSession.isOAuthUser {
             return Array(localOrders.wrappedValue)
         } else {
             guard let userId = userSession.userId else { return [] }
@@ -71,7 +71,7 @@ struct OrdersView: View {
     }
 
     private func refreshOrders() {
-        guard !userSession.isGoogleUser, let userId = userSession.userId else {
+        guard !userSession.isOAuthUser, let userId = userSession.userId else {
             return
         }
 
