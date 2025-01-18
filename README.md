@@ -75,4 +75,8 @@ https://github.com/user-attachments/assets/0b44e220-752b-4e45-a8fa-ab11a254c916
 
 :white_check_mark: 4.5 [Logowanie via Facebook OAuth2](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/edb14bea0d9dbcf47e87501e4a1ce0f3eed2f32d)
 
+:white_check_mark: 5.0 [Zapisywanie danych logowania OAuth2 po stronie serwera](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/0a24879f9a68894b731fe2a3b32c94e1651209c8)
+
 Kod: [ShoppingListOAuth](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListOAuth)
+
+https://github.com/user-attachments/assets/6399609b-40c6-4e89-8423-20f319f77f6f
