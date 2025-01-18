@@ -71,4 +71,6 @@ https://github.com/user-attachments/assets/0b44e220-752b-4e45-a8fa-ab11a254c916
 
 :white_check_mark: 3.5 [Rejestracja przez aplikację serwerową](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/e128843595c2b49c1bcb98e83bdae92dd8a258c7)
 
+:white_check_mark: 4.0 [Logowanie via Google OAuth2](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/16a60ccf4097cb8f843ff98a7d50e1ddf59aee82)
+
 Kod: [ShoppingListOAuth](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListOAuth)
