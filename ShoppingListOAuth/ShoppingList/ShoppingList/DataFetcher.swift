@@ -2,7 +2,7 @@
 //  DataFetcher.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/17/25.
+//  Created by Tirodoragon on 1/18/25.
 //
 
 import Foundation
@@ -26,8 +26,8 @@ class DataFetcher: ObservableObject {
     func loadData() {
         isLoading = true
         loadCategories {
-            self.loadProducts() {
-                self.loadOrders() {
+            self.loadProducts {
+                self.loadOrders { _ in
                     self.checkLoadingComplete()
                 }
             }
@@ -39,7 +39,9 @@ class DataFetcher: ObservableObject {
             DispatchQueue.main.async {
                 switch result {
                 case .success(let categories):
-                    self.saveCategories(categories, completion: completion)
+                    self.saveCategories(categories) {
+                        completion()
+                    }
                 case .failure(let error):
                     print("Failed to fetch categories: \(error.localizedDescription)")
                     completion()
@@ -47,13 +49,15 @@ class DataFetcher: ObservableObject {
             }
         }
     }
-    
+
     func loadProducts(completion: @escaping () -> Void = {}) {
         APIClient.shared.fetchJSON(from: "/products") { result in
             DispatchQueue.main.async {
                 switch result {
                 case .success(let products):
-                    self.saveProducts(products, completion: completion)
+                    self.saveProducts(products) {
+                        completion()
+                    }
                 case .failure(let error):
                     print("Failed to fetch products: \(error.localizedDescription)")
                     completion()
@@ -61,16 +65,20 @@ class DataFetcher: ObservableObject {
             }
         }
     }
-    
-    func loadOrders(completion: @escaping () -> Void = {}) {
+
+    func loadOrders(completion: @escaping ([Order]) -> Void) {
         APIClient.shared.fetchJSON(from: "/orders") { result in
             DispatchQueue.main.async {
                 switch result {
-                case .success(let orders):
-                    self.syncOrdersWithCoreData(orders, completion: completion)
+                case .success(let ordersData):
+                    self.syncOrdersWithCoreData(ordersData) {
+                        let fetchRequest: NSFetchRequest<Order> = Order.fetchRequest()
+                        let fetchedOrders = (try? self.viewContext.fetch(fetchRequest)) ?? []
+                        completion(fetchedOrders)
+                    }
                 case .failure(let error):
                     print("Failed to fetch orders: \(error.localizedDescription)")
-                    completion()
+                    completion([])
                 }
             }
         }

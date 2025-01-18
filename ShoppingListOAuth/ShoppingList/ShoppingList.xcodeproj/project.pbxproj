@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		FC2040792D3B32590075BD04 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FC2040782D3B32590075BD04 /* GoogleSignInSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		FC313A642D327F6B0057F9A7 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -29,9 +33,22 @@
 		FC313A6D2D327F6B0057F9A7 /* ShoppingListUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = ShoppingListUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		FC859BE12D3B3FC600290A9A /* Exceptions for "ShoppingList" folder in "ShoppingList" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				Info.plist,
+			);
+			target = FC313A4D2D327F690057F9A7 /* ShoppingList */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		FC313A502D327F690057F9A7 /* ShoppingList */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				FC859BE12D3B3FC600290A9A /* Exceptions for "ShoppingList" folder in "ShoppingList" target */,
+			);
 			path = ShoppingList;
 			sourceTree = "<group>";
 		};
@@ -52,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FC2040792D3B32590075BD04 /* GoogleSignInSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +130,7 @@
 			);
 			name = ShoppingList;
 			packageProductDependencies = (
+				FC2040782D3B32590075BD04 /* GoogleSignInSwift */,
 			);
 			productName = ShoppingList;
 			productReference = FC313A4E2D327F690057F9A7 /* ShoppingList.app */;
@@ -195,6 +214,9 @@
 			);
 			mainGroup = FC313A452D327F690057F9A7;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				FC2040772D3B32590075BD04 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FC313A4F2D327F690057F9A7 /* Products */;
 			projectDirPath = "";
@@ -398,6 +420,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ShoppingList/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShoppingList/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -426,6 +449,7 @@
 				DEVELOPMENT_ASSET_PATHS = "\"ShoppingList/Preview Content\"";
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = ShoppingList/Info.plist;
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -552,6 +576,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		FC2040772D3B32590075BD04 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		FC2040782D3B32590075BD04 /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FC2040772D3B32590075BD04 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = FC313A462D327F690057F9A7 /* Project object */;
 }

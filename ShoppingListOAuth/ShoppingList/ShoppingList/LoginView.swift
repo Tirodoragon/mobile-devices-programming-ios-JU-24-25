@@ -2,10 +2,12 @@
 //  LoginView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/17/25.
+//  Created by Tirodoragon on 1/18/25.
 //
 
 import SwiftUI
+import GoogleSignIn
+import GoogleSignInSwift
 
 struct LoginView: View {
     @EnvironmentObject var userSession: UserSession
@@ -57,6 +59,12 @@ struct LoginView: View {
                 }
 
                 Spacer()
+
+                GoogleSignInButton {
+                    handleGoogleSignIn()
+                }
+                .frame(height: 50)
+                .padding(.horizontal)
 
                 Button(action: {
                     navigateToRegister = true
@@ -119,5 +127,31 @@ struct LoginView: View {
                 }
             }
         }.resume()
+    }
+
+    private func handleGoogleSignIn() {
+        guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
+              let rootViewController = windowScene.windows.first?.rootViewController else {
+            errorMessage = "Unable to find root view controller."
+            return
+        }
+
+        GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController) { signInResult, error in
+            if let error = error {
+                errorMessage = "Google Sign-In failed: \(error.localizedDescription)"
+                return
+            }
+
+            guard let signInResult = signInResult else {
+                errorMessage = "Google Sign-In failed: No result."
+                return
+            }
+
+            let user = signInResult.user
+            let email = user.profile?.email ?? "Unknown Email"
+            userSession.userId = Int.random(in: 1000...9999)
+            userSession.username = email
+            userSession.isGoogleUser = true
+        }
     }
 }

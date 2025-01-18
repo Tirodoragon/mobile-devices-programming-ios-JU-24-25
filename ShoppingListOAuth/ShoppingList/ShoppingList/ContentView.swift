@@ -2,7 +2,7 @@
 //  ContentView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/17/25.
+//  Created by Tirodoragon on 1/18/25.
 //
 
 import SwiftUI
@@ -32,7 +32,7 @@ struct ContentView: View {
                         }
                         .environmentObject(dataFetcher)
                     
-                    OrdersView()
+                    OrdersView(userSession: userSession)
                         .tabItem {
                             Label("Orders", systemImage: "list.bullet.rectangle")
                         }

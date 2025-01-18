@@ -10,7 +10,7 @@
     {
         "id": 2,
         "date": "2025-01-12T15:30:00Z",
-        "totalPrice": 2499.00,
+        "totalPrice": 2499.0,
         "products": [3],
         "quantities": [1],
         "customerId": 1

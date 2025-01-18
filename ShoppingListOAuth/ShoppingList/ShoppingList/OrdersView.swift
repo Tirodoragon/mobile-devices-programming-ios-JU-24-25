@@ -2,7 +2,7 @@
 //  OrdersView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/17/25.
+//  Created by Tirodoragon on 1/18/25.
 //
 
 import SwiftUI
@@ -11,47 +11,87 @@ import CoreData
 struct OrdersView: View {
     @Environment(\.managedObjectContext) private var viewContext
     @EnvironmentObject var userSession: UserSession
-    
-    @FetchRequest(
-        sortDescriptors: [NSSortDescriptor(keyPath: \Order.date, ascending: true)],
-        animation: .default
-    ) private var allOrders: FetchedResults<Order>
-    
+
+    private var localOrders: FetchRequest<Order>
+
+    @State private var serverOrders: [Order] = []
+    @State private var isLoading: Bool = false
+
+    init(userSession: UserSession) {
+        if let userId = userSession.userId, userSession.isGoogleUser {
+            localOrders = FetchRequest<Order>(
+                entity: Order.entity(),
+                sortDescriptors: [NSSortDescriptor(keyPath: \Order.date, ascending: false)],
+                predicate: NSPredicate(format: "customerId == %d", userId)
+            )
+        } else {
+            localOrders = FetchRequest<Order>(
+                entity: Order.entity(),
+                sortDescriptors: [NSSortDescriptor(keyPath: \Order.date, ascending: false)],
+                predicate: nil
+            )
+        }
+    }
+
     var body: some View {
         NavigationView {
-            List {
-                if filteredOrders.isEmpty {
+            VStack {
+                if isLoading {
+                    ProgressView()
+                } else if filteredOrders.isEmpty {
                     Text("No orders available.")
                         .foregroundColor(.gray)
                 } else {
-                    ForEach(filteredOrders, id: \.self) { order in
+                    List(filteredOrders, id: \.self) { order in
                         OrderRow(order: order)
                     }
                 }
             }
             .navigationTitle("Orders")
             .refreshable {
-                refreshOrders()
+                if !userSession.isGoogleUser {
+                    refreshOrders()
+                }
+            }
+            .onAppear {
+                if !userSession.isGoogleUser {
+                    refreshOrders()
+                }
             }
         }
     }
-    
+
     private var filteredOrders: [Order] {
-        guard let userId = userSession.userId else {
-            return []
+        if userSession.isGoogleUser {
+            return Array(localOrders.wrappedValue)
+        } else {
+            guard let userId = userSession.userId else { return [] }
+            return serverOrders.filter { $0.customerId == userId }
         }
-        return allOrders.filter { $0.customerId == userId }
     }
-    
+
     private func refreshOrders() {
+        guard !userSession.isGoogleUser, let userId = userSession.userId else {
+            return
+        }
+
+        isLoading = true
         let dataFetcher = DataFetcher(context: viewContext)
-        dataFetcher.loadOrders()
+
+        dataFetcher.loadOrders { fetchedOrders in
+            DispatchQueue.main.async {
+                self.serverOrders = fetchedOrders
+                    .filter { $0.customerId == userId }
+                    .sorted(by: { $0.date ?? Date() > $1.date ?? Date() })
+                self.isLoading = false
+            }
+        }
     }
 }
 
 struct OrderRow: View {
     let order: Order
-    
+
     var body: some View {
         VStack(alignment: .leading) {
             Text("Date: \(formatDate(order.date))")
@@ -63,15 +103,14 @@ struct OrderRow: View {
         }
         .padding(.vertical, 5)
     }
-    
+
     private func renderProductsAndQuantities() -> some View {
         Group {
             if let productsSet = order.products?.allObjects as? [Product],
                let quantities = order.quantities as? [Int64] {
                 let sortedProducts = productsSet.sorted { $0.id < $1.id }
-                
                 let pairs = zip(sortedProducts, quantities)
-                
+
                 ForEach(Array(pairs), id: \.0.id) { product, quantity in
                     Text("\(product.name ?? "Unknown Product") - Quantity: \(quantity)")
                         .font(.footnote)
@@ -84,7 +123,7 @@ struct OrderRow: View {
             }
         }
     }
-    
+
     private func formatDate(_ date: Date?) -> String {
         guard let date = date else { return "Unknown Date" }
         let formatter = DateFormatter()

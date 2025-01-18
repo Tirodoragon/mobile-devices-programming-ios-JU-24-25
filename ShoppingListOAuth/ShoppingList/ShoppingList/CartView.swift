@@ -2,7 +2,7 @@
 //  CartView.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/17/25.
+//  Created by Tirodoragon on 1/18/25.
 //
 
 import SwiftUI
@@ -10,6 +10,8 @@ import CoreData
 
 struct CartView: View {
     @EnvironmentObject var cart: Cart
+    @EnvironmentObject var userSession: UserSession
+    @Environment(\.managedObjectContext) private var viewContext
     @State private var isSubmittingOrder = false
     @State private var orderSubmissionSuccess: Bool? = nil
     @EnvironmentObject var dataFetcher: DataFetcher
@@ -103,7 +105,7 @@ struct CartView: View {
                         .font(.headline)
                         .padding()
                         .transition(.opacity)
-                        .onAppear() {
+                        .onAppear {
                             if !success {
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
                                     orderSubmissionSuccess = nil
@@ -149,6 +151,14 @@ struct CartView: View {
         isSubmittingOrder = true
         orderSubmissionSuccess = nil
         
+        if userSession.isGoogleUser {
+            saveOrderLocally()
+        } else {
+            sendOrderToServer()
+        }
+    }
+    
+    private func sendOrderToServer() {
         guard let orderData = cart.prepareOrderData() else {
             isSubmittingOrder = false
             orderSubmissionSuccess = false
@@ -162,7 +172,8 @@ struct CartView: View {
                 case .success:
                     orderSubmissionSuccess = true
                     cart.clearCart()
-                    dataFetcher.loadOrders()
+                    dataFetcher.loadOrders { _ in
+                    }
                 case .failure:
                     orderSubmissionSuccess = false
                     DispatchQueue.main.asyncAfter(deadline: .now() + 5) {
@@ -171,5 +182,30 @@ struct CartView: View {
                 }
             }
         }
+    }
+    
+    private func saveOrderLocally() {
+        let newOrder = Order(context: viewContext)
+        newOrder.id = Int64(UUID().hashValue)
+        newOrder.date = Date()
+        newOrder.totalPrice = totalPrice
+        newOrder.customerId = Int64(userSession.userId ?? 0)
+        
+        for (product, _) in cart.products {
+            newOrder.addToProducts(product)
+        }
+        
+        let quantities = cart.products.values.map { NSNumber(value: $0) }
+        newOrder.quantities = NSArray(array: quantities)
+        
+        do {
+            try viewContext.save()
+            cart.clearCart()
+            orderSubmissionSuccess = true
+        } catch {
+            print("Failed to save order locally: \(error.localizedDescription)")
+            orderSubmissionSuccess = false
+        }
+        isSubmittingOrder = false
     }
 }
