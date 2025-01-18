@@ -8,7 +8,7 @@
         <relationship name="products" optional="YES" toMany="YES" deletionRule="Cascade" destinationEntity="Product" inverseName="category" inverseEntity="Product"/>
     </entity>
     <entity name="Order" representedClassName="Order" syncable="YES" codeGenerationType="class">
-        <attribute name="customerId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="customerId" optional="YES" attributeType="String"/>
         <attribute name="date" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
         <attribute name="quantities" optional="YES" attributeType="Transformable" valueTransformerName="NSSecureUnarchiveFromDataTransformerName"/>

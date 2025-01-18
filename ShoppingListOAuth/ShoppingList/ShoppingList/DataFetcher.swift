@@ -181,7 +181,7 @@ class DataFetcher: ObservableObject {
             newOrder.id = orderData["id"] as? Int64 ?? 0
             newOrder.date = ISO8601DateFormatter().date(from: orderData["date"] as? String ?? "")
             newOrder.totalPrice = orderData["totalPrice"] as? Double ?? 0.0
-            newOrder.customerId = orderData["customerId"] as? Int64 ?? 0
+            newOrder.customerId = orderData["customerId"] as? String ?? "0"
             
             if let productIds = orderData["products"] as? [Int64],
                let quantities = orderData["quantities"] as? [Int64] {

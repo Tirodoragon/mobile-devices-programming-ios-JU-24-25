@@ -130,7 +130,7 @@ struct LoginView: View {
                 
                 if let data = data,
                    let json = try? JSONSerialization.jsonObject(with: data) as? [String: Any],
-                   let userId = json["userId"] as? Int {
+                   let userId = json["userId"] as? String {
                     userSession.userId = userId
                     userSession.username = username
                 } else {
@@ -160,9 +160,20 @@ struct LoginView: View {
             
             let user = signInResult.user
             let email = user.profile?.email ?? "Unknown Email"
-            userSession.userId = Int.random(in: 1000...9999)
-            userSession.username = email
-            userSession.isOAuthUser = true
+            let googleUserId = user.userID ?? "0"
+            let token = user.accessToken.tokenString
+            
+            let loginData: [String: Any] = [
+                "username": email,
+                "oauth_id": googleUserId,
+                "token": token
+            ]
+            sendLoginRequest(data: loginData)
+            
+            DispatchQueue.main.async {
+                userSession.userId = googleUserId
+                userSession.username = email
+            }
         }
     }
     
@@ -193,15 +204,70 @@ struct LoginView: View {
                     }
                     
                     let email = userInfo["email"] as? String ?? "Unknown Email"
-                    let name = userInfo["name"] as? String ?? "Facebook User"
+                    let facebookUserId = userInfo["id"] as? String ?? "Unknown ID"
+                    
+                    let loginData: [String: Any] = [
+                        "username": email,
+                        "oauth_id": facebookUserId,
+                        "token": token
+                    ]
+                    sendLoginRequest(data: loginData)
                     
                     DispatchQueue.main.async {
-                        userSession.userId = Int.random(in: 1000...9999)
-                        userSession.isOAuthUser = true
+                        userSession.userId = facebookUserId
                         userSession.username = email
                     }
                 }
             }
         }
+    }
+    
+    private func sendLoginRequest(data: [String: Any]) {
+        guard let url = URL(string: "http://127.0.0.1:5000/login") else { return }
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        guard let httpBody = try? JSONSerialization.data(withJSONObject: data) else { return }
+        request.httpBody = httpBody
+        
+        URLSession.shared.dataTask(with: request) { responseData, response, error in
+            DispatchQueue.main.async {
+                if let error = error {
+                    errorMessage = "Failed to connect to the server: \(error.localizedDescription)"
+                    return
+                }
+                
+                guard let httpResponse = response as? HTTPURLResponse else {
+                    errorMessage = "Invalid server response."
+                    return
+                }
+                
+                if httpResponse.statusCode == 200 || httpResponse.statusCode == 201 {
+                    guard let responseData = responseData else {
+                        errorMessage = "No data received from server."
+                        return
+                    }
+                    
+                    do {
+                        if let json = try JSONSerialization.jsonObject(with: responseData) as? [String: Any] {
+                            if let userId = json["userId"] as? String {
+                                userSession.userId = userId
+                            }
+                            userSession.username = json["username"] as? String ?? "Unknown"
+                            errorMessage = ""
+                        } else {
+                            errorMessage = "Failed to parse server response."
+                        }
+                    } catch {
+                        errorMessage = "JSON decoding error: \(error.localizedDescription)"
+                    }
+                } else if httpResponse.statusCode == 409 {
+                    errorMessage = "User already exists (for registration scenarios)."
+                } else {
+                    errorMessage = "Login failed. Server responded with code: \(httpResponse.statusCode)"
+                }
+            }
+        }.resume()
     }
 }

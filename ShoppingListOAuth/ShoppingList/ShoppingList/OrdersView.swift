@@ -18,19 +18,11 @@ struct OrdersView: View {
     @State private var isLoading: Bool = false
 
     init(userSession: UserSession) {
-        if let userId = userSession.userId, userSession.isOAuthUser {
-            localOrders = FetchRequest<Order>(
-                entity: Order.entity(),
-                sortDescriptors: [NSSortDescriptor(keyPath: \Order.date, ascending: false)],
-                predicate: NSPredicate(format: "customerId == %d", userId)
-            )
-        } else {
-            localOrders = FetchRequest<Order>(
-                entity: Order.entity(),
-                sortDescriptors: [NSSortDescriptor(keyPath: \Order.date, ascending: false)],
-                predicate: nil
-            )
-        }
+        localOrders = FetchRequest<Order>(
+            entity: Order.entity(),
+            sortDescriptors: [NSSortDescriptor(keyPath: \Order.date, ascending: false)],
+            predicate: nil
+        )
     }
 
     var body: some View {
@@ -49,29 +41,21 @@ struct OrdersView: View {
             }
             .navigationTitle("Orders")
             .refreshable {
-                if !userSession.isOAuthUser {
-                    refreshOrders()
-                }
+                refreshOrders()
             }
             .onAppear {
-                if !userSession.isOAuthUser {
-                    refreshOrders()
-                }
+                refreshOrders()
             }
         }
     }
 
     private var filteredOrders: [Order] {
-        if userSession.isOAuthUser {
-            return Array(localOrders.wrappedValue)
-        } else {
-            guard let userId = userSession.userId else { return [] }
-            return serverOrders.filter { $0.customerId == userId }
-        }
+        guard let userId = userSession.userId else { return [] }
+        return serverOrders.filter { $0.customerId == userId }
     }
 
     private func refreshOrders() {
-        guard !userSession.isOAuthUser, let userId = userSession.userId else {
+        guard let userId = userSession.userId else {
             return
         }
 

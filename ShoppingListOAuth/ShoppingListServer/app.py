@@ -144,19 +144,37 @@ def add_product():
 @app.route('/login', methods=['POST'])
 def login():
     data = request.get_json()
-    if not data or 'username' not in data or 'password' not in data:
-        return jsonify({'error': 'Missing username or password'}), 400
-    
+    if not data or 'username' not in data:
+        return jsonify({'error': 'Missing username'}), 400
+
     username = data['username']
-    password = data['password']
+    oauth_id = data.get('oauth_id')
+    token = data.get('token')
 
     users = load_users()
-    user = next((u for u in users if u['username'] == username and u['password'] == password), None)
 
-    if user:
-        return jsonify({'message': 'Login successful', 'userId': user['id']}), 200
+    if oauth_id:
+        user = next((u for u in users if u['id'] == oauth_id), None)
+        if user:
+            if user['username'] == username:
+                return jsonify({'message': 'Login successful', 'userId': user['id']}), 200
+            else:
+                return jsonify({'error': 'OAuth ID mismatch'}), 403
+        else:
+            new_user = OrderedDict({
+                "id": oauth_id,
+                "username": username,
+                "password": token
+            })
+            users.append(new_user)
+            with open(USERS_FILE, 'w') as file:
+                json.dump(users, file, indent=4)
+            return jsonify({'message': 'login successful', 'userId': oauth_id}), 201
     else:
-        return jsonify({'error': 'Invalid credentials'}), 401
+        user = next((u for u in users if u['username'] == username), None)
+        if user and user.get('password') == data.get('password'):
+            return jsonify({'message': 'Login successful', 'userId': user['id']}), 200
+        return jsonify({'error': 'Invalid username or password'}), 403
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -172,7 +190,7 @@ def register():
     if any(u['username'] == username for u in users):
         return jsonify({'error': 'Username already exists'}), 409
 
-    new_user_id = max((u['id'] for u in users), default=0) + 1
+    new_user_id = str(next(i for i in range(1, len(users) + 2) if str(i) not in {u['id'] for u in users}))
     new_user = OrderedDict({
         "id": new_user_id,
         "username": username,

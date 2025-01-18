@@ -54,7 +54,7 @@ struct ProductListView: View {
             }
             .navigationTitle(category.name ?? "Products")
             .toolbar {
-                if userSession.userId == 1 {
+                if userSession.userId == "1" {
                     ToolbarItem(placement: .navigationBarTrailing) {
                         Button(action: {
                             isShowingAddProductView = true

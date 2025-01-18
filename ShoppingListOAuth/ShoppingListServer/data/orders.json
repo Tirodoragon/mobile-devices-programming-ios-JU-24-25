@@ -5,7 +5,7 @@
         "totalPrice": 9499.97,
         "products": [1, 2],
         "quantities": [1, 2],
-        "customerId": 1
+        "customerId": "1"
     },
     {
         "id": 2,
@@ -13,6 +13,6 @@
         "totalPrice": 2499.0,
         "products": [3],
         "quantities": [1],
-        "customerId": 1
+        "customerId": "1"
     }
 ]

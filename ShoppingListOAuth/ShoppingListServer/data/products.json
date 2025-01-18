@@ -20,7 +20,7 @@
         "name": "Refrigerator",
         "descriptionText": "Energy-efficient refrigerator with No Frost technology",
         "imageName": "static/fridge_image.jpg",
-        "price": 2499.00,
+        "price": 2499.0,
         "categoryId": 2
     }
 ]

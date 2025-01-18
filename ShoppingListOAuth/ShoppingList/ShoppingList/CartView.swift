@@ -151,11 +151,7 @@ struct CartView: View {
         isSubmittingOrder = true
         orderSubmissionSuccess = nil
         
-        if userSession.isOAuthUser {
-            saveOrderLocally()
-        } else {
-            sendOrderToServer()
-        }
+        sendOrderToServer()
     }
     
     private func sendOrderToServer() {
@@ -182,30 +178,5 @@ struct CartView: View {
                 }
             }
         }
-    }
-    
-    private func saveOrderLocally() {
-        let newOrder = Order(context: viewContext)
-        newOrder.id = Int64(UUID().hashValue)
-        newOrder.date = Date()
-        newOrder.totalPrice = totalPrice
-        newOrder.customerId = Int64(userSession.userId ?? 0)
-        
-        for (product, _) in cart.products {
-            newOrder.addToProducts(product)
-        }
-        
-        let quantities = cart.products.values.map { NSNumber(value: $0) }
-        newOrder.quantities = NSArray(array: quantities)
-        
-        do {
-            try viewContext.save()
-            cart.clearCart()
-            orderSubmissionSuccess = true
-        } catch {
-            print("Failed to save order locally: \(error.localizedDescription)")
-            orderSubmissionSuccess = false
-        }
-        isSubmittingOrder = false
     }
 }
