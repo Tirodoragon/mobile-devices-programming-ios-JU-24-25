@@ -179,6 +179,10 @@ struct PaymentFormView: View {
         if let order = fetchOrderById(orderId: orderId) {
             order.payment = payment
             payment.order = order
+            
+            let paidOrder = PaidOrder(context: viewContext)
+            paidOrder.id = paymentId
+            paidOrder.order = order
         }
         
         do {

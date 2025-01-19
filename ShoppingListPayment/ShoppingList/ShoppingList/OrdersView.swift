@@ -31,6 +31,7 @@ struct OrdersView: View {
                 } else if filteredOrders.isEmpty {
                     Text("No orders available.")
                         .foregroundColor(.gray)
+                        .padding()
                 } else {
                     List(filteredOrders, id: \Order.id) { order in
                         OrderRow(
@@ -70,7 +71,7 @@ struct OrdersView: View {
 
     private var filteredOrders: [Order] {
         guard let userId = userSession.userId else { return [] }
-        return serverOrders.filter { $0.customerId == userId }
+        return serverOrders.filter { $0.customerId == userId && $0.payment == nil}
     }
 
     private func refreshOrders() {
@@ -104,25 +105,18 @@ struct OrderRow: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             renderProductsAndQuantities()
-            if let paymentStatus = order.payment?.status, paymentStatus == "completed" {
-                Text("Paid")
-                    .foregroundColor(.green)
-                    .font(.subheadline)
-                    .padding(.top, 8)
-            } else {
-                VStack(alignment: .leading) {
-                    Button(action: onPay) {
-                        Text("Pay Now")
-                            .foregroundColor(.white)
-                            .padding()
-                            .frame(maxWidth: .infinity)
-                            .background(Color.blue)
-                            .cornerRadius(10)
-                    }
-                    .contentShape(Rectangle())
-                    .buttonStyle(PlainButtonStyle())
-                    .padding(.top, 8)
+            VStack(alignment: .leading) {
+                Button(action: onPay) {
+                    Text("Pay Now")
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                        .background(Color.blue)
+                        .cornerRadius(10)
                 }
+                .contentShape(Rectangle())
+                .buttonStyle(PlainButtonStyle())
+                .padding(.top, 8)
             }
         }
         .contentShape(Rectangle())

@@ -37,6 +37,12 @@ struct ContentView: View {
                             Label("Orders", systemImage: "list.bullet.rectangle")
                         }
                         .environmentObject(dataFetcher)
+                    
+                    PaidOrdersView()
+                        .tabItem {
+                            Label("Paid Orders", systemImage: "checkmark.rectangle")
+                        }
+                        .environmentObject(dataFetcher)
                 }
                 .onAppear {
                     dataFetcher.loadData()

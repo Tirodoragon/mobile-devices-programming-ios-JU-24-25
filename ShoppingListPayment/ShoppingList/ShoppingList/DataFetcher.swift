@@ -170,43 +170,71 @@ class DataFetcher: ObservableObject {
     
     private func syncOrdersWithCoreData(_ orders: [Dictionary<String, Any>], completion: @escaping () -> Void) {
         let fetchRequest: NSFetchRequest<Order> = Order.fetchRequest()
-        if let existingOrders = try? viewContext.fetch(fetchRequest) {
-            for order in existingOrders {
-                viewContext.delete(order)
+        let existingOrders = (try? viewContext.fetch(fetchRequest)) ?? []
+        let serverOrderIds = Set(orders.compactMap { $0["id"] as? Int64 })
+        
+        for orderData in orders {
+            let orderId = orderData["id"] as? Int64 ?? 0
+            
+            if let existingOrder = existingOrders.first(where: { $0.id == orderId }) {
+                existingOrder.date = ISO8601DateFormatter().date(from: orderData["date"] as? String ?? "")
+                existingOrder.totalPrice = orderData["totalPrice"] as? Double ?? 0.0
+                existingOrder.customerId = orderData["customerId"] as? String ?? "0"
+                
+                if let productIds = orderData["products"] as? [Int64],
+                   let quantities = orderData["quantities"] as? [Int64] {
+                    let sortedProductsWithQuantities = zip(productIds, quantities)
+                        .sorted { $0.0 < $1.0 }
+                    existingOrder.products = NSSet(array: fetchProducts(byIds: sortedProductsWithQuantities.map { $0.0 }))
+                    existingOrder.quantities = sortedProductsWithQuantities.map { $0.1 } as NSObject
+                }
+                
+                if let paymentId = orderData["paymentId"] as? Int64 {
+                    let fetchPaymentRequest: NSFetchRequest<Payment> = Payment.fetchRequest()
+                    fetchPaymentRequest.predicate = NSPredicate(format: "id == %d", paymentId)
+                    
+                    if let payment = (try? viewContext.fetch(fetchPaymentRequest))?.first {
+                        existingOrder.payment = payment
+                        payment.order = existingOrder
+                    } else {
+                        print("Warning: Payment with ID \(paymentId) not found for Order ID \(existingOrder.id)")
+                    }
+                } else {
+                    existingOrder.payment = nil
+                }
+            } else {
+                let newOrder = Order(context: viewContext)
+                newOrder.id = orderId
+                newOrder.date = ISO8601DateFormatter().date(from: orderData["date"] as? String ?? "")
+                newOrder.totalPrice = orderData["totalPrice"] as? Double ?? 0.0
+                newOrder.customerId = orderData["customerId"] as? String ?? "0"
+                
+                if let productIds = orderData["products"] as? [Int64],
+                   let quantities = orderData["quantities"] as? [Int64] {
+                    let sortedProductsWithQuantities = zip(productIds, quantities)
+                        .sorted { $0.0 < $1.0 }
+                    newOrder.products = NSSet(array: fetchProducts(byIds: sortedProductsWithQuantities.map { $0.0 }))
+                    newOrder.quantities = sortedProductsWithQuantities.map { $0.1 } as NSObject
+                }
+                
+                if let paymentId = orderData["paymentId"] as? Int64 {
+                    let fetchPaymentRequest: NSFetchRequest<Payment> = Payment.fetchRequest()
+                    fetchPaymentRequest.predicate = NSPredicate(format: "id == %d", paymentId)
+                    
+                    if let payment = (try? viewContext.fetch(fetchPaymentRequest))?.first {
+                        newOrder.payment = payment
+                        payment.order = newOrder
+                    } else {
+                        print("Warning: Payment with ID \(paymentId) not found for Order ID \(newOrder.id)")
+                    }
+                }
             }
         }
         
-        for orderData in orders {
-            let newOrder = Order(context: viewContext)
-            newOrder.id = orderData["id"] as? Int64 ?? 0
-            newOrder.date = ISO8601DateFormatter().date(from: orderData["date"] as? String ?? "")
-            newOrder.totalPrice = orderData["totalPrice"] as? Double ?? 0.0
-            newOrder.customerId = orderData["customerId"] as? String ?? "0"
-            
-            if let productIds = orderData["products"] as? [Int64],
-               let quantities = orderData["quantities"] as? [Int64] {
-                let sortedProductsWithQuantities = zip(productIds, quantities)
-                    .sorted { $0.0 < $1.0 }
-    
-                newOrder.products = NSSet(array: fetchProducts(byIds: sortedProductsWithQuantities.map { $0.0 }))
-                newOrder.quantities = sortedProductsWithQuantities.map { $0.1 } as NSObject
-            }
-            
-            if let paymentId = orderData["paymentId"] as? Int64 {
-                let fetchPaymentRequest: NSFetchRequest<Payment> = Payment.fetchRequest()
-                fetchPaymentRequest.predicate = NSPredicate(format: "id == %d", paymentId)
-                
-                if let payment = (try? viewContext.fetch(fetchPaymentRequest))?.first {
-                    newOrder.payment = payment
-                    payment.order = newOrder
-                } else {
-                    print("Warning: Payment with ID \(paymentId) not found for Order ID \(newOrder.id)")
-                }
-            } else {
-                newOrder.payment = nil
-            }
+        for existingOrder in existingOrders where !serverOrderIds.contains(existingOrder.id) {
+            viewContext.delete(existingOrder)
         }
-
+        
         saveContext()
         completion()
     }
