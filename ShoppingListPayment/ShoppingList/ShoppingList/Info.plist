@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>com.googleusercontent.apps.305043109081-vkl2qfroik0ptlhne22mjjfvhjivsu1k</string>
+			</array>
+		</dict>
+		<dict>
+			<key>CFBundleTypeRole</key>
+			<string>None</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>fb644004784810909</string>
+			</array>
+		</dict>
+	</array>
+	<key>FacebookAppID</key>
+	<string>644004784810909</string>
+	<key>FacebookClientToken</key>
+	<string>06a652b7ed3fa7c2983d02a8504f45f0</string>
+	<key>FacebookDisplayName</key>
+	<string>ShoppingList iOS OAuth2</string>
+	<key>GIDClientID</key>
+	<string>305043109081-vkl2qfroik0ptlhne22mjjfvhjivsu1k.apps.googleusercontent.com</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>fbapi</string>
+		<string>fb-messenger-share-api</string>
+	</array>
+</dict>
+</plist>
