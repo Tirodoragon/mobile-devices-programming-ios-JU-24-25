@@ -80,3 +80,9 @@ https://github.com/user-attachments/assets/0b44e220-752b-4e45-a8fa-ab11a254c916
 Kod: [ShoppingListOAuth](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListOAuth)
 
 https://github.com/user-attachments/assets/6399609b-40c6-4e89-8423-20f319f77f6f
+
+**Zadanie 6** Płatności
+
+:white_check_mark: 3.0 [Formularz płatności oraz mockowanie przez aplikację serwerową](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/1e36ead4a37c5bcc8f0d775dc9cc0be321fe4874)
+
+Kod: [ShoppingListPayment](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListPayment)
