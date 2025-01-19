@@ -9,13 +9,13 @@ import CoreData
 
 struct PersistenceController {
     static let shared = PersistenceController()
-
+    
     static let inMemory: PersistenceController = {
         PersistenceController(inMemory: true)
     }()
     
     let container: NSPersistentContainer
-
+    
     init(inMemory: Bool = false) {
         container = NSPersistentContainer(name: "ShoppingList")
         if inMemory {

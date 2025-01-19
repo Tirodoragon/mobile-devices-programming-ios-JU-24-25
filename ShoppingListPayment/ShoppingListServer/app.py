@@ -210,7 +210,7 @@ def pay():
     if not data:
         return jsonify({'error': 'Payment data is missing'}), 400
     
-    required_fields = ['orderId', 'paymentDate', 'status', 'method', 'cardNumber', 'expiryDate', 'cvv']
+    required_fields = ['orderId', 'paymentDate', 'status', 'method', 'cardNumber', 'expiryDate', 'cvv', 'paymentId']
     for field in required_fields:
         if field not in data:
             return jsonify({'error': f'Missing field: {field}.'}), 400
@@ -247,6 +247,15 @@ def pay():
         payment_status = "completed"
     else:
         payment_status = "failed"
+
+    orders = load_orders()
+
+    for order in orders:
+        if order['id'] == data['orderId']:
+            order['paymentId'] = data['paymentId']
+            break
+
+    save_orders_to_file(orders)
 
     return jsonify({'status': payment_status, 'message': 'Payment processed successfully.'}), 200
 

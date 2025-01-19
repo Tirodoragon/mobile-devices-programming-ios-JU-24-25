@@ -191,6 +191,20 @@ class DataFetcher: ObservableObject {
                 newOrder.products = NSSet(array: fetchProducts(byIds: sortedProductsWithQuantities.map { $0.0 }))
                 newOrder.quantities = sortedProductsWithQuantities.map { $0.1 } as NSObject
             }
+            
+            if let paymentId = orderData["paymentId"] as? Int64 {
+                let fetchPaymentRequest: NSFetchRequest<Payment> = Payment.fetchRequest()
+                fetchPaymentRequest.predicate = NSPredicate(format: "id == %d", paymentId)
+                
+                if let payment = (try? viewContext.fetch(fetchPaymentRequest))?.first {
+                    newOrder.payment = payment
+                    payment.order = newOrder
+                } else {
+                    print("Warning: Payment with ID \(paymentId) not found for Order ID \(newOrder.id)")
+                }
+            } else {
+                newOrder.payment = nil
+            }
         }
 
         saveContext()

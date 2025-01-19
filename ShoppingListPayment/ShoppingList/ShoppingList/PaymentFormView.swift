@@ -6,8 +6,10 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct PaymentFormView: View {
+    @Environment(\.managedObjectContext) private var viewContext
     @Environment(\.presentationMode) var presentationMode
     @Binding var orderId: Int64
     @State private var cardNumber: String = ""
@@ -15,6 +17,7 @@ struct PaymentFormView: View {
     @State private var cvv: String = ""
     @State private var isProcessing: Bool = false
     @State private var paymentStatus: String = ""
+    @State private var paymentId: Int64 = 0
     @State private var showValidationMessage: Bool = false
     var onPaymentCompletion: () -> Void
     
@@ -115,6 +118,7 @@ struct PaymentFormView: View {
     private func processPayment() {
         isProcessing = true
         paymentStatus = ""
+        paymentId = getNextAvailableId()
         
         let paymentData: [String: Any] = [
             "orderId": orderId,
@@ -123,7 +127,8 @@ struct PaymentFormView: View {
             "method": "credit_card",
             "cardNumber": cardNumber,
             "expiryDate": expiryDate,
-            "cvv": cvv
+            "cvv": cvv,
+            "paymentId": paymentId
         ]
         
         guard let url = URL(string: "http://127.0.0.1:5000/pay") else { return }
@@ -152,6 +157,7 @@ struct PaymentFormView: View {
                 if httpResponse.statusCode == 200 {
                     if let status = json["status"] as? String, status == "completed" {
                         paymentStatus = "Payment Successful!"
+                        savePaymentToCoreData(paymentId: paymentId)
                         onPaymentCompletion()
                     } else {
                         paymentStatus = "Payment failed: \(json["message"] as? String ?? "Unknown error.")"
@@ -161,5 +167,56 @@ struct PaymentFormView: View {
                 }
             }
         }.resume()
+    }
+    
+    private func savePaymentToCoreData(paymentId: Int64) {
+        let payment = Payment(context: viewContext)
+        payment.id = paymentId
+        payment.method = "credit_card"
+        payment.paymentDate = Date()
+        payment.status = "completed"
+        
+        if let order = fetchOrderById(orderId: orderId) {
+            order.payment = payment
+            payment.order = order
+        }
+        
+        do {
+            try viewContext.save()
+        } catch {
+            print("Error saving payment to CoreData: \(error.localizedDescription)")
+        }
+    }
+    
+    private func getNextAvailableId() -> Int64 {
+        let fetchRequest: NSFetchRequest<Payment> = Payment.fetchRequest()
+        fetchRequest.sortDescriptors = [NSSortDescriptor(key: "id", ascending: true)]
+        fetchRequest.propertiesToFetch = ["id"]
+        
+        do {
+            let payments = try viewContext.fetch(fetchRequest)
+
+            if payments.isEmpty {
+                return 1
+            } else {
+                let usedIds = payments.compactMap { $0.id }.sorted()
+                return (usedIds.last ?? 0) + 1
+            }
+        } catch {
+            print("Failed to fetch payments: \(error)")
+            return 1
+        }
+    }
+        
+    private func fetchOrderById(orderId: Int64) -> Order? {
+        let fetchRequest: NSFetchRequest<Order> = Order.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "id == %d", orderId)
+        
+        do {
+            return try viewContext.fetch(fetchRequest).first
+        } catch {
+            print("Error fetching order by ID: \(error.localizedDescription)")
+            return nil
+        }
     }
 }

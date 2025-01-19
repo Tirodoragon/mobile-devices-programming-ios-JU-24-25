@@ -20,7 +20,6 @@ struct OrdersView: View {
 
     @State private var serverOrders: [Order] = []
     @State private var isLoading: Bool = false
-    @State private var paidOrders: Set<Int64> = []
     @State private var selectedOrderId: Int64? = nil
     @State private var showPaymentForm = false
 
@@ -36,7 +35,6 @@ struct OrdersView: View {
                     List(filteredOrders, id: \Order.id) { order in
                         OrderRow(
                             order: order,
-                            isPaid: paidOrders.contains(order.id),
                             onPay: {
                                 selectedOrderId = order.id
                             }
@@ -56,10 +54,10 @@ struct OrdersView: View {
             }) {
                 if let orderId = selectedOrderId {
                     PaymentFormView(orderId: .constant(orderId), onPaymentCompletion: {
-                        paidOrders.insert(orderId)
                         selectedOrderId = nil
                         showPaymentForm = false
                     })
+                    .environment(\.managedObjectContext, viewContext)
                 } else {
                     Text("Error: No Order Selected")
                 }
@@ -96,7 +94,6 @@ struct OrdersView: View {
 
 struct OrderRow: View {
     let order: Order
-    let isPaid: Bool
     let onPay: () -> Void
 
     var body: some View {
@@ -107,23 +104,28 @@ struct OrderRow: View {
                 .font(.subheadline)
                 .foregroundColor(.secondary)
             renderProductsAndQuantities()
-            if !isPaid {
-                Button(action: onPay) {
-                    Text("Pay Now")
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(Color.blue)
-                        .cornerRadius(10)
-                }
-                .padding(.top, 8)
-            } else {
+            if let paymentStatus = order.payment?.status, paymentStatus == "completed" {
                 Text("Paid")
                     .foregroundColor(.green)
                     .font(.subheadline)
                     .padding(.top, 8)
+            } else {
+                VStack(alignment: .leading) {
+                    Button(action: onPay) {
+                        Text("Pay Now")
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
+                    .contentShape(Rectangle())
+                    .buttonStyle(PlainButtonStyle())
+                    .padding(.top, 8)
+                }
             }
         }
+        .contentShape(Rectangle())
         .padding(.vertical, 5)
     }
 
