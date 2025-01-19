@@ -87,4 +87,6 @@ https://github.com/user-attachments/assets/6399609b-40c6-4e89-8423-20f319f77f6f
 
 :white_check_mark: 3.5 [Model płatności lokalnie](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/c61cd23052962eb17b3b66fff0bd7892fd2ff202)
 
+:white_check_mark: 4.0 [Lista zakupionych (opłaconych) produktów + model](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/df2e482a5d8d37d32ba2a9c98b94710d100ebff6)
+
 Kod: [ShoppingListPayment](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListPayment)
