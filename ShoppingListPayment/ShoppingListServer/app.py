@@ -5,6 +5,7 @@ from werkzeug.utils import secure_filename
 import os
 import json
 import re
+import stripe
 
 app = Flask(__name__)
 
@@ -16,6 +17,8 @@ if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 USERS_FILE = 'data/users.json'
+
+stripe.api_key = "sk_test_51Qj73BFw77tZp9mU8Ka4uZSemYzl3DgOOG2tMl3saJXmXtjgoDfQb94yLRrni9E10QSFOT6tnKRhdsXs8KbbH2eQ00bmoXlzHc"
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
@@ -204,8 +207,8 @@ def register():
 
     return jsonify({'message': 'Registration successful', 'userId': new_user_id}), 201
 
-@app.route('/pay', methods=['POST'])
-def pay():
+@app.route('/pay_with_card', methods=['POST'])
+def pay_with_card():
     data = request.get_json()
     if not data:
         return jsonify({'error': 'Payment data is missing'}), 400
@@ -259,6 +262,58 @@ def pay():
 
     return jsonify({'status': payment_status, 'message': 'Payment processed successfully.'}), 200
 
+@app.route('/payment-sheet', methods=['POST'])
+def payment_sheet():
+    data = request.get_json()
+
+    try:
+        order_total = round(float(f"{data.get('orderTotal'):.2f}") * 100)
+    except:
+        return jsonify(error="Invalid orderTotal"), 400
+
+    customer = stripe.Customer.create()
+    ephemeralKey = stripe.EphemeralKey.create(
+        customer=customer['id'],
+        stripe_version='2024-12-18.acacia',
+    )
+
+    paymentIntent = stripe.PaymentIntent.create(
+        amount=order_total,
+        currency='usd',
+        customer=customer['id']
+    )
+
+    return jsonify(paymentIntent=paymentIntent.client_secret,
+                 ephemeralKey=ephemeralKey.secret,
+                 customer=customer.id,
+                 publishableKey='pk_test_51Qj73BFw77tZp9mUBgcLP7vUq2I6T8gGkY6j6AM569NT5eOPYanPtkPE4lq9qZ8K1tDbNOqiGNLkO3BO7einl31R00WnEhY0BU')
+
+@app.route('/pay_with_stripe', methods=['POST'])
+def pay_with_stripe():
+    data = request.get_json()
+    if not data:
+        return jsonify({'error': 'Payment data is missing'}), 400
+    
+    required_fields = ['orderId', 'paymentDate', 'status', 'method', 'paymentId']
+    for field in required_fields:
+        if field not in data:
+            return jsonify({'error': f'Missing field: {field}.'}), 400
+    
+    if data['method'] == "stripe":
+        payment_status = "completed"
+    else:
+        payment_status = "failed"
+
+    orders = load_orders()
+
+    for order in orders:
+        if order['id'] == data['orderId']:
+            order['paymentId'] = data['paymentId']
+            break
+
+    save_orders_to_file(orders)
+
+    return jsonify({'status': payment_status, 'message': 'Payment processed successfully.'}), 200
 
 if __name__ == "__main__":
     app.run(debug=True)

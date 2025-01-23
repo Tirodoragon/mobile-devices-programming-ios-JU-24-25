@@ -2,11 +2,12 @@
 //  ShoppingListApp.swift
 //  ShoppingList
 //
-//  Created by Tirodoragon on 1/19/25.
+//  Created by Tirodoragon on 1/22/25.
 //
 
 import SwiftUI
 import FacebookCore
+import StripePaymentSheet
 
 @main
 struct ShoppingListApp: App {
@@ -21,6 +22,9 @@ struct ShoppingListApp: App {
                     .environment(\.managedObjectContext, persistenceController.container.viewContext)
                     .environmentObject(Cart(userSession: userSession))
                     .environmentObject(userSession)
+                    .onOpenURL { incomingURL in
+                        StripeAPI.handleURLCallback(with: incomingURL)
+                    }
             } else {
                 LoginView()
                     .environmentObject(userSession)

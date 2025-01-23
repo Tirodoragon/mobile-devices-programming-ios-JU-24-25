@@ -10,6 +10,7 @@
 		FC2040792D3B32590075BD04 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = FC2040782D3B32590075BD04 /* GoogleSignInSwift */; };
 		FC3A896D2D3C16A70072ACB6 /* FacebookCore in Frameworks */ = {isa = PBXBuildFile; productRef = FC3A896C2D3C16A70072ACB6 /* FacebookCore */; };
 		FC3A896F2D3C16A70072ACB6 /* FacebookLogin in Frameworks */ = {isa = PBXBuildFile; productRef = FC3A896E2D3C16A70072ACB6 /* FacebookLogin */; };
+		FCE34A482D3EB3C10099B2AC /* StripePaymentSheet in Frameworks */ = {isa = PBXBuildFile; productRef = FCE34A472D3EB3C10099B2AC /* StripePaymentSheet */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				FCE34A482D3EB3C10099B2AC /* StripePaymentSheet in Frameworks */,
 				FC2040792D3B32590075BD04 /* GoogleSignInSwift in Frameworks */,
 				FC3A896D2D3C16A70072ACB6 /* FacebookCore in Frameworks */,
 				FC3A896F2D3C16A70072ACB6 /* FacebookLogin in Frameworks */,
@@ -137,6 +139,7 @@
 				FC2040782D3B32590075BD04 /* GoogleSignInSwift */,
 				FC3A896C2D3C16A70072ACB6 /* FacebookCore */,
 				FC3A896E2D3C16A70072ACB6 /* FacebookLogin */,
+				FCE34A472D3EB3C10099B2AC /* StripePaymentSheet */,
 			);
 			productName = ShoppingList;
 			productReference = FC313A4E2D327F690057F9A7 /* ShoppingList.app */;
@@ -223,6 +226,7 @@
 			packageReferences = (
 				FC2040772D3B32590075BD04 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
 				FC3A896B2D3C16A70072ACB6 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */,
+				FCE34A462D3EB3C10099B2AC /* XCRemoteSwiftPackageReference "stripe-ios-spm" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = FC313A4F2D327F690057F9A7 /* Products */;
@@ -601,6 +605,14 @@
 				minimumVersion = 14.1.0;
 			};
 		};
+		FCE34A462D3EB3C10099B2AC /* XCRemoteSwiftPackageReference "stripe-ios-spm" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/stripe/stripe-ios-spm";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 24.4.0;
+			};
+		};
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
@@ -618,6 +630,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = FC3A896B2D3C16A70072ACB6 /* XCRemoteSwiftPackageReference "facebook-ios-sdk" */;
 			productName = FacebookLogin;
+		};
+		FCE34A472D3EB3C10099B2AC /* StripePaymentSheet */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = FCE34A462D3EB3C10099B2AC /* XCRemoteSwiftPackageReference "stripe-ios-spm" */;
+			productName = StripePaymentSheet;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
