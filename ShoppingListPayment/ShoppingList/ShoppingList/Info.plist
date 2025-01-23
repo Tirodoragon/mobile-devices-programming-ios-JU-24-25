@@ -31,6 +31,8 @@
 	</array>
 	<key>FacebookAdvertiserIDCollectionEnabled</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>To scan cards</string>
 	<key>FacebookAppID</key>
 	<string>644004784810909</string>
 	<key>FacebookAutoLogAppEventsEnabled</key>
