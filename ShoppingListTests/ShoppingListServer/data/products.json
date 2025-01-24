@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "name": "Laptop",
+        "descriptionText": "High-performance laptop with 16GB RAM",
+        "imageName": "static/laptop_image.png",
+        "price": 3499.99,
+        "categoryId": 1
+    },
+    {
+        "id": 2,
+        "name": "Smartphone",
+        "descriptionText": "OLED display smartphone with a 108 MP camera",
+        "imageName": "static/smartphone_image.jpg",
+        "price": 2999.99,
+        "categoryId": 1
+    },
+    {
+        "id": 3,
+        "name": "Refrigerator",
+        "descriptionText": "Energy-efficient refrigerator with No Frost technology",
+        "imageName": "static/fridge_image.jpg",
+        "price": 2499.0,
+        "categoryId": 2
+    }
+]
