@@ -96,3 +96,11 @@ https://github.com/user-attachments/assets/6399609b-40c6-4e89-8423-20f319f77f6f
 Kod: [ShoppingListPayment](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListPayment)
 
 https://github.com/user-attachments/assets/ab85a800-4b57-497f-a0f2-658db2f6503d
+
+**Zadanie 7** Testy
+
+:white_check_mark: 3.0 [Stworzyć 30 asercji testów funkcjonalnych](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/commit/8e525b0d6a66030d411cf2b0f3f64ee240433aa4)
+
+Kod: [ShoppingListTests](https://github.com/Tirodoragon/mobile-devices-programming-ios-JU-24-25/tree/main/ShoppingListTests)
+
+https://github.com/user-attachments/assets/f9a73a3b-515b-414d-90f0-dcb20998bdd4
